@@ -15,6 +15,4 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     @Query("select u from User u where u.userType =1")
     List<User> getAllUsers();
 
-    @Query("select u from User u where u.userType = 0")
-    List<User> getAdmins();
 }

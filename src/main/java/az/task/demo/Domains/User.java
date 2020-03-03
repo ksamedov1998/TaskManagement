@@ -2,17 +2,14 @@ package az.task.demo.Domains;
 
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Component
 @Entity
 public class User{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private int userType;
@@ -22,6 +19,7 @@ public class User{
     private String email;
 
     private String password;
+
 
 
     public String getPassword() {

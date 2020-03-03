@@ -22,11 +22,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping(value = "/admin")
-    public List<User> getUsersWithAdminPrivilage(){
-        return userService.getAdmins();
-    }
-
     @GetMapping(value = "{userID}")
     public User getUserByID(@PathVariable(value = "userID") int userId){
         return userService.getUserById(userId);

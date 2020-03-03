@@ -23,13 +23,4 @@ public class UserServiceImp implements UserService {
         return userRepository.getAllUsers();
     }
 
-    @Override
-    public void addUser(User user) {
-        userRepository.save(user);
-    }
-
-    @Override
-    public List<User> getAdmins() {
-        return userRepository.getAdmins();
-    }
 }
