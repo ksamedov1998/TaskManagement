@@ -5,6 +5,7 @@ import az.task.demo.Domains.User;
 import az.task.demo.Domains.UserType;
 import az.task.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,12 @@ public class AddController {
                         ){
 
 //        create User do smth
-        userService.addUser(new User());
+        User user= new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(BCrypt.hashpw(password,BCrypt.gensalt()));
+        System.out.println(user);
+       userService.addUser(new User());
     }
 
     @RequestMapping("/admin/{admin}")

@@ -24,7 +24,13 @@ public class User{
     private String password;
 
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     private int status=1;
 
@@ -81,7 +87,10 @@ public class User{
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", userType=" + userType +
                 ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", status=" + status +
                 '}';
     }
