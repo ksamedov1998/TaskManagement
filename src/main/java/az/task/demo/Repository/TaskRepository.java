@@ -12,13 +12,16 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task,Integer> {
+
     @Modifying
-    @Query(value = "insert into Task(header,description,user_id) values(:header,:description,:user_id)",nativeQuery = true)
+    @Query(value = "insert into Task(header,description) values(:header,:description)",nativeQuery = true)
     @Transactional
-    void save(String header, String description, @Param(value ="user_id") int userId);
+    void save(String header, String description);
 
 //    Task status should be added
     void deleteTaskById(int taskId);
 
     List<Task> findAll();
+
+    Task getTaskById(int taskId);
 }

@@ -18,7 +18,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void addTask(String header,String description,int userId) {
-        taskRepository.save(header,description,userId);
+        taskRepository.save(header,description);
     }
 
     @Override
@@ -29,5 +29,10 @@ public class TaskServiceImp implements TaskService {
     @Override
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public Task getTask(int taskId) {
+        return taskRepository.getTaskById(taskId);
     }
 }

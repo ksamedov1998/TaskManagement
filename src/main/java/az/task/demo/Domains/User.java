@@ -20,8 +20,9 @@ public class User{
     @Column(name = "user_type")
     private int userType;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,targetEntity = Task.class,cascade = CascadeType.ALL)
-    private List<Task> task;
+
+    @ManyToMany(mappedBy = "listOfUsers")
+    private List<Task> taskList;
 
     private String username;
 
@@ -35,12 +36,14 @@ public class User{
     public User() {
     }
 
-    public List<Task> getTask() {
-        return task;
+
+
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setTask(List<Task> task) {
-        this.task = task;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
     public String getEmail() {
@@ -96,7 +99,6 @@ public class User{
         return "User{" +
                 "id=" + id +
                 ", userType=" + userType +
-                ", task=" + task +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

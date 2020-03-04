@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Component
@@ -14,15 +15,28 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany()
+    @JoinTable(name = "User_Task",
+                    joinColumns = {@JoinColumn(name = "user_task")},
+                    inverseJoinColumns = {@JoinColumn(name = "task_user")})
+    private List<User> listOfUsers;
+
+
 
     private String header;
 
     private String description;
 
     public Task() {
+    }
+
+
+    public List<User> getListOfUsers() {
+        return listOfUsers;
+    }
+
+    public void setListOfUsers(List<User> listOfUsers) {
+        this.listOfUsers = listOfUsers;
     }
 
     public int getId() {
@@ -50,8 +64,4 @@ public class Task implements Serializable {
     }
 
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

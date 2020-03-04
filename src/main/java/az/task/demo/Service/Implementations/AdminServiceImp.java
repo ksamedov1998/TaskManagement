@@ -19,7 +19,7 @@ public class AdminServiceImp implements AdminService {
 
     @Override
     public User getAdminById(int userId) {
-        return adminRepository.getUserAndTaskById(userId);
+        return adminRepository.getUserById(userId);
     }
 
     @Override

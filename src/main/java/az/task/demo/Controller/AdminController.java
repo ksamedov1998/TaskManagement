@@ -19,18 +19,12 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    private TaskService taskService;
 
     @GetMapping(value = "/")
     public List<User> getAdminList(){
         return adminService.getAdminList();
     }
 
-    @GetMapping(value = "/task")
-    public List<Task> getTasks(){
-        return taskService.getAllTasks();
-    }
 
     @GetMapping(value = "/{adminID}")
     public User getAdminByID(@PathVariable(value = "adminID") int adminId){
