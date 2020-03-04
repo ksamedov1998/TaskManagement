@@ -2,8 +2,10 @@ package az.task.demo.Controller;
 
 
 import az.task.demo.Domains.Enums.UserStatus;
+import az.task.demo.Domains.Task;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
+import az.task.demo.Service.TaskService;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,17 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private TaskService taskService;
+
     @GetMapping(value = "/")
     public List<User> getAdminList(){
         return adminService.getAdminList();
+    }
+
+    @GetMapping(value = "/task")
+    public List<Task> getTasks(){
+        return taskService.getAllTasks();
     }
 
     @GetMapping(value = "/{adminID}")

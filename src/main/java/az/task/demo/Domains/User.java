@@ -1,9 +1,13 @@
 package az.task.demo.Domains;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -11,12 +15,12 @@ import java.util.List;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_type")
     private int userType;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId",orphanRemoval = true,targetEntity = Task.class)
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,targetEntity = Task.class,cascade = CascadeType.ALL)
     private List<Task> task;
 
     private String username;
@@ -27,11 +31,6 @@ public class User{
 
     private int status;
 
-    public User(String username,int userType) {
-        this();
-        this.setUserType(userType);
-        this.setUsername(username);
-    }
 
     public User() {
     }
@@ -68,11 +67,11 @@ public class User{
         this.userType = userType;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -97,6 +96,7 @@ public class User{
         return "User{" +
                 "id=" + id +
                 ", userType=" + userType +
+                ", task=" + task +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

@@ -17,8 +17,9 @@ public class TaskController {
 
     @PostMapping("/add")
     public void createTask(@RequestParam(value = "header") String header,
-                           @RequestParam(value = "desc") String description){
-        taskService.addTask(header,description);
+                           @RequestParam(value = "desc") String description,
+                           @RequestParam(value = "userId") int userId){
+        taskService.addTask(header,description,userId);
     }
 
     @GetMapping("/delete/{taskId}")

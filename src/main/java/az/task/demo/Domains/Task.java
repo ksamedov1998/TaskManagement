@@ -1,5 +1,7 @@
 package az.task.demo.Domains;
 
+import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -12,9 +14,9 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
-    private int userId;
+    private User user;
 
     private String header;
 
@@ -49,11 +51,7 @@ public class Task implements Serializable {
 
 
     @Override
-    public String toString() {
-        return "TaskController{" +
-                "id=" + id +
-                ", header='" + header + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public int hashCode() {
+        return super.hashCode();
     }
 }

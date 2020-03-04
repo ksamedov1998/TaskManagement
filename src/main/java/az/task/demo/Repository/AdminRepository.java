@@ -14,7 +14,7 @@ public interface AdminRepository extends JpaRepository<User,Integer> {
     @Query("select u from User u where u.userType = 0")
     List<User> getAdminList();
 
-    User getUserById(int userId);
+    User getUserAndTaskById(int userId);
 
 
 
