@@ -1,4 +1,4 @@
-package az.task.demo.Domains;
+package az.task.demo.Domains.Enums;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,16 +1,13 @@
 package az.task.demo.Controller;
 
 
+import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.User;
-import az.task.demo.Domains.UserType;
 import az.task.demo.Service.AdminService;
-import az.task.demo.Service.UserService;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -37,12 +34,14 @@ public class AdminController {
                         @RequestParam(value = "type") int userType
     ){
      password=PasswordUtil.encryptPassword(password);
-        adminService.addUser(username,email,password,userType,1);
+        adminService.addUser(username,email,password,userType, UserStatus.getStatus(UserStatus.ACTIVE));
     }
 
     @GetMapping("/delete/{userID}")
     public void deleteUser(@PathVariable(value = "userID") int userId){
         adminService.deleteUserById(userId);
     }
+
+
 
 }

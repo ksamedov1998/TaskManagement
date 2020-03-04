@@ -3,6 +3,7 @@ package az.task.demo.Domains;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Component
@@ -12,7 +13,11 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "user_type")
     private int userType;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId",orphanRemoval = true,targetEntity = Task.class)
+    private List<Task> task;
 
     private String username;
 
@@ -20,17 +25,7 @@ public class User{
 
     private String password;
 
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    private int status=1;
+    private int status;
 
     public User(String username,int userType) {
         this();
@@ -41,12 +36,28 @@ public class User{
     public User() {
     }
 
+    public List<Task> getTask() {
+        return task;
+    }
+
+    public void setTask(List<Task> task) {
+        this.task = task;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getUserType() {

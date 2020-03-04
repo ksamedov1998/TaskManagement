@@ -18,9 +18,5 @@ public class UserServiceImp implements UserService {
         return userRepository.getUserById(userId);
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
 
 }

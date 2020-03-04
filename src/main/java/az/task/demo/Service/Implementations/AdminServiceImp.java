@@ -1,5 +1,6 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.AdminRepository;
 import az.task.demo.Service.AdminService;
@@ -35,6 +36,11 @@ public class AdminServiceImp implements AdminService {
 
     @Override
     public void deleteUserById(int userId) {
-        adminRepository.deleteUserById(userId);
+        adminRepository.deleteUserById(userId, UserStatus.getStatus(UserStatus.DELETED));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return adminRepository.findAll();
     }
 }

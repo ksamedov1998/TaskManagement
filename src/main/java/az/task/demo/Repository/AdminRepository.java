@@ -27,6 +27,10 @@ public interface AdminRepository extends JpaRepository<User,Integer> {
                   @Param("userType") int userType,
                   @Param("status") int status);
 
-    void deleteUserById(int userId);
+    @Modifying
+    @Query(value = "update into User(status) values(:status) where User.id= :id",nativeQuery = true)
+    @Transactional
+    void deleteUserById(@Param(value = "id") int userId,
+                        @Param(value ="status") int deletedStatus);
 
 }

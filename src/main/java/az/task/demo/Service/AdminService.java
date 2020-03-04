@@ -9,4 +9,5 @@ public interface AdminService {
     List<User> getAdminList();
     void addUser(String username,String email,String password,int userType, int status);
     void deleteUserById(int id);
+    List<User> getAllUsers();
 }
