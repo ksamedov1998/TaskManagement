@@ -1,5 +1,6 @@
 package az.task.demo.Domains;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class User{
     @Column(name = "user_type")
     private int userType;
 
-
+    @JsonBackReference
     @ManyToMany(mappedBy = "listOfUsers")
     private List<Task> taskList;
 
@@ -37,10 +38,10 @@ public class User{
     }
 
 
-
     public List<Task> getTaskList() {
         return taskList;
     }
+
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;

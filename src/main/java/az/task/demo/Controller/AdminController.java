@@ -2,19 +2,23 @@ package az.task.demo.Controller;
 
 
 import az.task.demo.Domains.Enums.UserStatus;
-import az.task.demo.Domains.Task;
+import az.task.demo.Domains.Log.Log;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
-import az.task.demo.Service.TaskService;
+import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Level;
 
 @RestController
 @RequestMapping(value = "/admin")
 public class AdminController {
+
+    @Autowired
+    private LogHandler logHandler;
 
     @Autowired
     private AdminService adminService;
@@ -43,8 +47,13 @@ public class AdminController {
 
     @GetMapping("/delete/{userID}")
     public void deleteUser(@PathVariable(value = "userID") int userId){
+        Log log = new Log();
+        log.setLevel(Level.FINE);
+        log.setDescription("User deleted");
+        logHandler.print(log);
         adminService.deleteUserById(userId);
     }
+
 
 
 

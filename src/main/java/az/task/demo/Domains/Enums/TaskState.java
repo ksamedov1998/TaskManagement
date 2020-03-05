@@ -12,10 +12,15 @@ public enum TaskState {
         this.value=value;
     }
 
-    public static int getStatus(TaskState userType){
-        List<TaskState> type= Arrays.stream(TaskState.values()).filter(a->a==userType).collect(Collectors.toList());
+    public static int getState(TaskState taskState){
+        List<TaskState> type= Arrays.stream(TaskState.values()).filter(a->a==taskState).collect(Collectors.toList());
         return type.get(0).value;
     }
+
+    public static boolean checkState(int taskStateValue){
+        return Arrays.stream(TaskState.values()).anyMatch(a->a.getValue()==taskStateValue);
+    }
+
 
     public int getValue() {
         return value;
