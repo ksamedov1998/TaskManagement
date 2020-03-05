@@ -9,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NamedNativeQuery;
 import java.util.List;
+import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<User,Integer> {
+
     @Query("select u from User u where u.userType = 0")
     List<User> getAdminList();
 
-    User getUserById(int userId);
+    Optional<User> getUserById(int userId);
 
 
 

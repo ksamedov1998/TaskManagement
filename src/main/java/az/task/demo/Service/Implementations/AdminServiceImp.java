@@ -1,5 +1,6 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.AdminRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,7 +21,11 @@ public class AdminServiceImp implements AdminService {
 
     @Override
     public User getAdminById(int userId) {
-        return adminRepository.getUserById(userId);
+        Optional<User> user=adminRepository.getUserById(userId);
+        if(!user.isPresent()){
+            throw new UserNotFound("User not found");
+        }
+        return user.get();
     }
 
     @Override
