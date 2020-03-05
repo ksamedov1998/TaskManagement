@@ -1,5 +1,7 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.Domains.Enums.UserStatus;
+import az.task.demo.Domains.Enums.UserType;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.UserService;
@@ -16,6 +18,11 @@ public class UserServiceImp implements UserService {
     @Override
     public User getUserById(int userId) {
         return userRepository.getUserById(userId);
+    }
+
+    @Override
+    public List<User> getUserList() {
+        return userRepository.findAllByUserTypeEqualsAndStatusEquals(UserType.getStatus(UserType.USER),UserStatus.getStatus(UserStatus.ACTIVE));
     }
 
 

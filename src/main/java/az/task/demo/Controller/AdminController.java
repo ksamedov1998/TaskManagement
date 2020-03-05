@@ -8,8 +8,10 @@ import az.task.demo.Service.AdminService;
 import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -35,7 +37,7 @@ public class AdminController {
         return adminService.getAdminById(adminId);
     }
 
-    @PostMapping("/add/user")
+    @PostMapping(value = "/add/user")
     public void addUser(@RequestParam(value = "username") String username,
                         @RequestParam(value = "email") String email,
                         @RequestParam(value = "password") String password,

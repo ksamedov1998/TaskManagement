@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     User getUserById(int userId);
 
-    @Query("select u from User u where u.userType =1")
-    List<User> getAllUsers();
+    List<User> findAllByUserTypeEqualsAndStatusEquals(int userType,int userStatus);
+
 
 }
