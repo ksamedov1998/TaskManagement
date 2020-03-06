@@ -37,9 +37,10 @@ public class TaskController {
         taskService.addTask(header,description,assignDate,deadline);
     }
 
-    @GetMapping("/delete/{taskId}")
-    public void deleteTask(@PathVariable(value = "taskId") int taskId){
-        taskService.deleteTask(taskId);
+    @GetMapping("/update/{taskId}/status/{newStatus}")
+    public void updateTaskStatus(@PathVariable(value = "taskId") int taskId,
+                           @PathVariable(value = "newStatus") int status){
+        taskService.updateTaskStatus(taskId,status);
     }
 
     @GetMapping("/assign/task/{taskId}/user/{userId}")

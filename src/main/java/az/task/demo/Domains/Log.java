@@ -1,4 +1,4 @@
-package az.task.demo.Domains.Log;
+package az.task.demo.Domains;
 
 
 import javax.persistence.Entity;

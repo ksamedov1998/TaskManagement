@@ -1,7 +1,9 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.CustomExceptions.StatusNotFoundException;
 import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.UserStatus;
+import az.task.demo.Domains.Enums.UserType;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.AdminRepository;
 import az.task.demo.Service.AdminService;
@@ -20,10 +22,10 @@ public class AdminServiceImp implements AdminService {
     private AdminRepository adminRepository;
 
     @Override
-    public User getAdminById(int userId) {
-        Optional<User> user=adminRepository.getUserById(userId);
+    public User getAdminById(int adminId) {
+        Optional<User> user=adminRepository.getUserById(adminId);
         if(!user.isPresent()){
-            throw new UserNotFound("User not found");
+            throw new UserNotFound(adminId);
         }
         return user.get();
     }
@@ -36,13 +38,25 @@ public class AdminServiceImp implements AdminService {
 
     @Override
     public void addUser(String username, String email, String password, int userType, int status) {
+        checkUserTypeAndStatus(userType,status);
         adminRepository.saveUser(username,email,password,userType,status);
+    }
+
+    private void checkUserTypeAndStatus(int userType, int status) throws StatusNotFoundException{
+        if(!UserType.checkType(userType)){
+            throw new StatusNotFoundException(status,"USERTYPE");
+        }
+        if(!UserType.checkType(userType)){
+            throw new StatusNotFoundException(status,"USERSTATUS");
+        }
     }
 
 
     @Override
     public void deleteUserById(int userId) {
-        adminRepository.deleteUserById(userId, UserStatus.getStatus(UserStatus.DELETED));
+        if(adminRepository.deleteUserById(userId, UserStatus.getStatus(UserStatus.DELETED))==0){
+            throw new UserNotFound(userId);
+        }
     }
 
     @Override

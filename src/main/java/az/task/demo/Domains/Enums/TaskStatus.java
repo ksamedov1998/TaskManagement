@@ -17,6 +17,10 @@ public enum TaskStatus {
         return type.get(0).value;
     }
 
+    public static boolean checkState(int taskStatusValue){
+        return Arrays.stream(TaskStatus.values()).anyMatch(a->a.getValue()==taskStatusValue);
+    }
+
     public int getValue() {
         return value;
     }

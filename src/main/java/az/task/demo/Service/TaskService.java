@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TaskService {
     void addTask(String header,String description,String assignDateStr,String deadlineStr);
-    void deleteTask(int taskId);
+    void updateTaskStatus(int taskId,int taskStatus);
     List<Task> getAllTasks();
     Task getTask(int taskId);
     void assignTaskToUser(int taskId, int userId);

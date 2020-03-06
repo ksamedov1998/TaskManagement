@@ -1,39 +1,53 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.CustomExceptions.StatusNotFoundException;
+import az.task.demo.CustomExceptions.TaskNotFound;
+import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.TaskState;
 import az.task.demo.Domains.Enums.TaskStatus;
 import az.task.demo.Domains.Task;
 import az.task.demo.Repository.TaskRepository;
+import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class TaskServiceImp implements TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public void addTask(String header,String description,String assignDateStr,String deadlineStr) {
-        LocalDate assignDate=StringToLocalDateConverter(assignDateStr); //can throw Runtime exception
-        LocalDate deadlineDate=StringToLocalDateConverter(deadlineStr); //can throw Runtime exception
-        if(isAssignDateAfterDeadline(assignDate,deadlineDate)){
-            taskRepository.save(header,description,assignDate,deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED),TaskStatus.getStatus(TaskStatus.ACTIVE));
-        }else{
-            System.out.println("Wrong");
+    public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
+        LocalDate assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
+        LocalDate deadlineDate = StringToLocalDateConverter(deadlineStr); // throws Runtime exception
+        if (isAssignDateAfterDeadline(assignDate, deadlineDate)) {
+            taskRepository.save(header, description, assignDate, deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED), TaskStatus.getStatus(TaskStatus.ACTIVE));
+        } else {
+            throw new DateTimeException("Inconsistency between " + deadlineStr + " and  " + assignDateStr + "[ Deadline should be after Assignment date ]");
         }
     }
 
     @Override
-    public void deleteTask(int taskId) {
-        taskRepository.deleteTaskById(taskId);
+    public void updateTaskStatus(int taskId, int taskStatus) {
+        if (!TaskStatus.checkState(taskStatus)) {
+            throw new StatusNotFoundException(taskStatus, "TASKSTATUS");
+        }
+        if (taskRepository.updateTaskStatus(taskStatus, taskId) == 0) {
+            throw new TaskNotFound(taskId);
+        }
     }
 
     @Override
@@ -43,39 +57,59 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public Task getTask(int taskId) {
-        return taskRepository.getTaskById(taskId);
+        Optional<Task> task = taskRepository.getTaskById(taskId);
+        if (!task.isPresent()) {
+            throw new TaskNotFound(taskId);
+        }
+        return task.get();
     }
 
     @Override
     public void assignTaskToUser(int taskId, int userId) {
-            taskRepository.assignTaskToUser(taskId,userId);
+        //  Boilerplate code |
+        if (!taskRepository.getTaskById(taskId).isPresent()) {
+            throw new TaskNotFound(taskId);
+        }
+        if (!userRepository.getUserById(userId).isPresent()) {
+            throw new UserNotFound(userId);
+        }
+        //  | needed to fix
+
+        taskRepository.assignTaskToUser(taskId, userId);
     }
 
     @Override
-    public void updateDeadline(int taskId,String newDeadline) {
-        LocalDate assignDate=StringToLocalDateConverter(newDeadline); //can throw Runtime exception
-        taskRepository.updateTaskDeadline(taskId,assignDate);
-    }
+    public void updateDeadline(int taskId, String newDeadline) {
+        LocalDate assignDate = StringToLocalDateConverter(newDeadline); //can throw Runtime exception
+        if(taskRepository.updateTaskDeadline(taskId, assignDate)==0){
+            throw new TaskNotFound(taskId);
+        }
+        }
 
     @Override
-    public void updateTaskState(int taskId,int taskState) {
-        if(TaskState.checkState(taskState)){
-            taskRepository.updateTaskState(taskId,taskState);
-        }else{
-//            throw Exception
+    public void updateTaskState(int taskId, int taskState) {
+        if (TaskState.checkState(taskState)) {
+            if(updateTask(taskId,taskState)){
+                throw new TaskNotFound(taskId);
+            }
+        } else {
+            throw new StatusNotFoundException(taskState,"TASKSTATE");
         }
 
     }
 
     private boolean isAssignDateAfterDeadline(LocalDate assignDate, LocalDate deadlineDate) {
-        boolean isAfter=false;
-        if(deadlineDate.isAfter(assignDate)){
-            isAfter=true;
+        boolean isAfter = false;
+        if (deadlineDate.isAfter(assignDate)) {
+            isAfter = true;
         }
         return isAfter;
     }
 
-    private LocalDate StringToLocalDateConverter(String date){
+    private LocalDate StringToLocalDateConverter(String date) throws DateTimeParseException {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+    private boolean updateTask(int taskId, int taskState) {
+        return taskRepository.updateTaskState(taskId, taskState)==0;
     }
 }
