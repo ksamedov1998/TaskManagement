@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 
 @Entity
@@ -14,8 +15,7 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-    private Level level;
+    private String level;
 
     private String state;
 
@@ -25,17 +25,43 @@ public class Log {
 
     private String point;
 
-    public Log() {
+    private LocalDateTime timestamp;
 
+    public Log() {
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Log(String level, String state, String exception, String description, String point,LocalDateTime localDateTime) {
+        this.level=level;
+        this.description=description;
+        this.exception=exception;
+        this.state=state;
+        this.point=point;
+        this.timestamp=localDateTime;
     }
 
 
-    public Level getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getException() {

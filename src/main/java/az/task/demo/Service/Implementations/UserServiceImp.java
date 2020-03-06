@@ -6,10 +6,10 @@ import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.UserService;
+import az.task.demo.Util.LogHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +18,15 @@ public class UserServiceImp implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private LogHandler logHandler;
+
     @Override
     public User getUserById(int userId) {
         Optional<User> user=userRepository.getUserById(userId);
         if(!user.isPresent()){
             throw new UserNotFound(userId);
+
         }
         return user.get();
     }

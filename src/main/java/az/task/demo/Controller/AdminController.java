@@ -20,8 +20,6 @@ import java.util.logging.Level;
 @RequestMapping(value = "/admin")
 public class AdminController {
 
-    @Autowired
-    private LogHandler logHandler;
 
     @Autowired
     private AdminService adminService;
@@ -58,10 +56,6 @@ public class AdminController {
 
     @GetMapping("/delete/{userID}")
     public void deleteUser(@PathVariable(value = "userID") int userId){
-        Log log = new Log();
-        log.setLevel(Level.FINE);
-        log.setDescription("User deleted");
-        logHandler.publish(log);
         adminService.deleteUserById(userId);
     }
 

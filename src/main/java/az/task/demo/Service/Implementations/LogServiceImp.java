@@ -12,6 +12,6 @@ public class LogServiceImp implements az.task.demo.Service.LogService {
     private LogRepository logRepository;
 
     public void save(Log log) {
-
+        logRepository.save(log);
     }
 }
