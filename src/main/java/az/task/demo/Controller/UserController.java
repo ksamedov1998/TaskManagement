@@ -22,9 +22,4 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @GetMapping(value = "/")
-    public List<User> getUserList(){
-        return  userService.getUserList();
-    }
-
 }

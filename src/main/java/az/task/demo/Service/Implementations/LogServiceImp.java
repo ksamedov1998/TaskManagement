@@ -1,6 +1,6 @@
 package az.task.demo.Service.Implementations;
 
-import az.task.demo.Domains.Log.Log;
+import az.task.demo.Domains.Log;
 import az.task.demo.Repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

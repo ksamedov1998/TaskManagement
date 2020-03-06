@@ -2,9 +2,10 @@ package az.task.demo.Controller;
 
 
 import az.task.demo.Domains.Enums.UserStatus;
-import az.task.demo.Domains.Log.Log;
+import az.task.demo.Domains.Log;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
+import az.task.demo.Service.UserService;
 import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,20 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private UserService userService;
 
-    @GetMapping(value = "/")
-    public List<User> getAdminList(){
-        return adminService.getAdminList();
+
+    @GetMapping(value = "/users/type/{user_type}")
+    public List<User> getUserListByType(@PathVariable(value = "user_type") int userType){
+        return userService.getUserListByType(userType);
     }
 
+
+    @GetMapping(value = "/users/status//{status}")
+    public List<User> getUserListByStatus(@PathVariable(value = "status") int status){
+        return userService.getUserListByStatus(status);
+    }
 
     @GetMapping(value = "/{adminID}")
     public User getAdminByID(@PathVariable(value = "adminID") int adminId){
@@ -52,7 +61,7 @@ public class AdminController {
         Log log = new Log();
         log.setLevel(Level.FINE);
         log.setDescription("User deleted");
-        logHandler.print(log);
+        logHandler.publish(log);
         adminService.deleteUserById(userId);
     }
 

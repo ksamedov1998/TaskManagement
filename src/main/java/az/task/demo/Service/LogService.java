@@ -1,8 +1,6 @@
 package az.task.demo.Service;
 
-import az.task.demo.Domains.Log.Log;
-
-import java.util.logging.LogRecord;
+import az.task.demo.Domains.Log;
 
 public interface LogService {
     void save(Log log);

@@ -12,9 +12,16 @@ public enum UserType {
         this.value=value;
     }
 
-    public static int getStatus(UserType userType){
+    public static int getType(UserType userType){
      List<UserType> type= Arrays.stream(UserType.values()).filter(a->a==userType).collect(Collectors.toList());
         return type.get(0).value;
     }
 
+    public static boolean checkType(int userTypeValue){
+        return Arrays.stream(UserType.values()).anyMatch(a->a.getValue()==userTypeValue);
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
