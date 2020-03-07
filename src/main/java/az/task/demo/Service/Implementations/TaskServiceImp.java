@@ -1,5 +1,6 @@
 package az.task.demo.Service.Implementations;
 
+import az.task.demo.CustomExceptions.LogBuilder;
 import az.task.demo.CustomExceptions.StatusNotFoundException;
 import az.task.demo.CustomExceptions.TaskNotFound;
 import az.task.demo.CustomExceptions.UserNotFound;
@@ -9,6 +10,7 @@ import az.task.demo.Domains.Task;
 import az.task.demo.Repository.TaskRepository;
 import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.TaskService;
+import az.task.demo.Util.LogHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
 @Service
 public class TaskServiceImp implements TaskService {
@@ -28,6 +31,9 @@ public class TaskServiceImp implements TaskService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LogHandler logHandler;
 
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
@@ -43,9 +49,24 @@ public class TaskServiceImp implements TaskService {
     @Override
     public void updateTaskStatus(int taskId, int taskStatus) {
         if (!TaskStatus.checkState(taskStatus)) {
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateTaskStatus")
+                    .setException("StatusNotFoundException")
+                    .setDescription("TaskStatus is not correct")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new StatusNotFoundException(taskStatus, "TASKSTATUS");
         }
         if (taskRepository.updateTaskStatus(taskStatus, taskId) == 0) {
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateTaskStatus")
+                    .setException("TaskNotFoundException")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new TaskNotFound(taskId);
         }
     }
@@ -59,6 +80,13 @@ public class TaskServiceImp implements TaskService {
     public Task getTask(int taskId) {
         Optional<Task> task = taskRepository.getTaskById(taskId);
         if (!task.isPresent()) {
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateTaskStatus")
+                    .setException("TaskNotFoundException")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new TaskNotFound(taskId);
         }
         return task.get();
@@ -82,6 +110,13 @@ public class TaskServiceImp implements TaskService {
     public void updateDeadline(int taskId, String newDeadline) {
         LocalDate assignDate = StringToLocalDateConverter(newDeadline); //can throw Runtime exception
         if(taskRepository.updateTaskDeadline(taskId, assignDate)==0){
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateDeadline")
+                    .setException("TaskNotFoundException")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new TaskNotFound(taskId);
         }
         }
@@ -90,9 +125,23 @@ public class TaskServiceImp implements TaskService {
     public void updateTaskState(int taskId, int taskState) {
         if (TaskState.checkState(taskState)) {
             if(updateTask(taskId,taskState)){
+                logHandler.publish(new LogBuilder()
+                        .setPoint("TaskServiceImp.updateTask")
+                        .setException("TaskNotFoundException")
+                        .setLevel(Level.INFO.getName())
+                        .setState("FAIL")
+                        .build()
+                );
                 throw new TaskNotFound(taskId);
             }
         } else {
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateDeadline")
+                    .setException("StatusNotFoundException")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new StatusNotFoundException(taskState,"TASKSTATE");
         }
 

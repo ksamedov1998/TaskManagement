@@ -31,7 +31,6 @@ public class AdminServiceImp implements AdminService {
     public User getAdminById(int adminId) {
         Optional<User> user=adminRepository.getUserById(adminId);
         if(!user.isPresent()){
-//            logHandler.publish(LogCreator.createLog("Fail", Level.INFO,"UserNotFoundException","AdminServiceImp.getAdminById"));
             logHandler.publish(new LogBuilder()
                                         .setPoint("AdminServiceImp.getAdminById")
                                         .setException("UserNotFoundException")
@@ -58,9 +57,25 @@ public class AdminServiceImp implements AdminService {
 
     private void checkUserTypeAndStatus(int userType, int status) throws StatusNotFoundException{
         if(!UserType.checkType(userType)){
+            logHandler.publish(new LogBuilder()
+                    .setPoint("AdminServiceImp.addUser")
+                    .setException("StatusNotFoundException")
+                    .setDescription("UserType is not correct")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new StatusNotFoundException(status,"USERTYPE");
         }
-        if(!UserType.checkType(userType)){
+        if(!UserStatus.checkStatus(status)){
+            logHandler.publish(new LogBuilder()
+                    .setPoint("AdminServiceImp.addUser")
+                    .setException("StatusNotFoundException")
+                    .setDescription("UserStatus is not correct")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new StatusNotFoundException(status,"USERSTATUS");
         }
     }
@@ -69,7 +84,13 @@ public class AdminServiceImp implements AdminService {
     @Override
     public void deleteUserById(int userId) {
         if(adminRepository.deleteUserById(userId, UserStatus.getStatus(UserStatus.DELETED))==0){
-            logHandler.publish(LogCreator.createLog("Fail", Level.INFO,"UserNotFoundException","AdminServiceImp.deleteUserById"));
+            logHandler.publish(new LogBuilder()
+                    .setPoint("AdminServiceImp.deleteUserById")
+                    .setException("UserNotFound")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
             throw new UserNotFound(userId);
         }
     }

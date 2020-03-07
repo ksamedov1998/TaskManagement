@@ -17,7 +17,7 @@ public enum UserStatus {
         return type.get(0).value;
     }
 
-    public static boolean checkState(int userStatusValue){
+    public static boolean checkStatus(int userStatusValue){
         return Arrays.stream(UserStatus.values()).anyMatch(a->a.getValue()==userStatusValue);
     }
     public int getValue() {
