@@ -7,9 +7,11 @@ import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.Enums.UserType;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.AdminRepository;
+import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Service.AdminService;
-import az.task.demo.Util.LogCreator;
+import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
+import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class AdminServiceImp implements AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+
     @Autowired
     private LogHandler logHandler;
 
@@ -42,6 +46,8 @@ public class AdminServiceImp implements AdminService {
         }
         return user.get();
     }
+
+
 
     @Override
     public List<User> getAdminList() {
@@ -99,4 +105,7 @@ public class AdminServiceImp implements AdminService {
     public List<User> getAllUsers() {
         return adminRepository.findAll();
     }
+
+
+
 }

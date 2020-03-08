@@ -25,7 +25,7 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     void save(String header, String description, LocalDate assignDate, LocalDate deadline,@Param(value = "task_state") int taskState,@Param(value = "task_status") int taskStatus);
 
     @Modifying
-    @Query(value = "update Task set task_status:task_status where id:id",nativeQuery = true)
+    @Query(value = "update Task set task_status:task_status where id=:id",nativeQuery = true)
     @Transactional
     int updateTaskStatus(@Param(value = "task_status") int taskStatus,
                     @Param(value = "id") int taskId);

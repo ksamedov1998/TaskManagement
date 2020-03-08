@@ -12,4 +12,6 @@ public interface TaskService {
     void assignTaskToUser(int taskId, int userId);
     void updateDeadline(int taskId,String newDeadline);
     void updateTaskState(int taskId,int taskState);
+
+    void updateTask(int taskId, Task task);
 }

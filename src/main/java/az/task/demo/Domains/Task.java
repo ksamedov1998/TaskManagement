@@ -25,7 +25,7 @@ public class Task implements Serializable {
     @JoinTable(name = "User_Task",
                     joinColumns = {@JoinColumn(name = "user_task")},
                     inverseJoinColumns = {@JoinColumn(name = "task_user")})
-    @JsonManagedReference
+    @JsonIgnore
     private List<User> listOfUsers;
 
     private String header;

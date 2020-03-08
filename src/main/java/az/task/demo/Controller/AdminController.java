@@ -2,19 +2,14 @@ package az.task.demo.Controller;
 
 
 import az.task.demo.Domains.Enums.UserStatus;
-import az.task.demo.Domains.Log;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
 import az.task.demo.Service.UserService;
-import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
-import java.util.logging.Level;
 
 @RestController
 @RequestMapping(value = "/admin")
@@ -58,7 +53,6 @@ public class AdminController {
     public void deleteUser(@PathVariable(value = "userID") int userId){
         adminService.deleteUserById(userId);
     }
-
 
 
 

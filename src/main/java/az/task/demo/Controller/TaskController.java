@@ -1,7 +1,10 @@
 package az.task.demo.Controller;
 
+import az.task.demo.CustomExceptions.TaskNotFound;
 import az.task.demo.Domains.Task;
+import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Service.TaskService;
+import az.task.demo.Util.DynamicQueryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,6 +15,7 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
 
     @GetMapping(value = "/")
     public List<Task> getTasks(){
@@ -52,6 +56,13 @@ public class TaskController {
     @PostMapping("/postpone/{taskId}")
     public void updateDeadline(@PathVariable(value = "taskId") int taskId,@RequestParam(value = "newDeadline") String newDeadline){
         taskService.updateDeadline(taskId,newDeadline);
+    }
+
+    @PostMapping("/update/{taskId}")
+    public void updateTask(@PathVariable(value = "taskId") int taskId,
+                            @RequestBody Task task){
+        System.out.println("smth");
+        taskService.updateTask(taskId,task);
     }
 
 }

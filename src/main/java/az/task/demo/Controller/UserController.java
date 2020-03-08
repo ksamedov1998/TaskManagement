@@ -3,10 +3,7 @@ package az.task.demo.Controller;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +19,9 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
+    @PostMapping(value = "/update/{userId}")
+    public void addUser(@PathVariable(value = "userId") int id,
+                        @RequestBody User user){
+        userService.updateUser(id,user);
+    }
 }

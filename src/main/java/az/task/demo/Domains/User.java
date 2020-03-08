@@ -3,6 +3,7 @@ package az.task.demo.Domains;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 
 @Component
+@DynamicUpdate
 @Entity
 public class User{
     @Id
@@ -21,7 +23,7 @@ public class User{
     @Column(name = "user_type")
     private int userType;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(mappedBy = "listOfUsers")
     private List<Task> taskList;
 
