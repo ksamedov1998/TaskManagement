@@ -15,21 +15,15 @@ import java.io.IOException;
 @Configuration
 @Order(1)
 public class Firebase {
-
-    @Bean
-    public TokenFilter tokenFilter() {
-        return new TokenFilter();
-    }
-
     @Bean
     public FirebaseApp firebaseInit() throws IOException {
-        FileInputStream refreshToken = new FileInputStream("/home/kamran/Downloads/taskmanagement-41a46-firebase-adminsdk-nd2wg-e35f6d5b1d.json");
+        FileInputStream refreshToken = new FileInputStream("/home/kamran/Desktop/taskmanagement-41a46-firebase-adminsdk-nd2wg-2731e63c32.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(refreshToken))
                 .setDatabaseUrl("https://taskmanagement-41a46.firebaseio.com/")
                 .setProjectId("taskmanagement-41a46 ")
                 .build();
-        return FirebaseApp.initializeApp(options);
+        return FirebaseApp.initializeApp(options,"smth");
     }
 
 }

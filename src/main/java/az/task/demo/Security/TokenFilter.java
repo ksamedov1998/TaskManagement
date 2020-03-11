@@ -28,23 +28,26 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
             String idToken = securityUtil.getTokenFromRequest(httpServletRequest);
             FirebaseToken decodedToken = null;
+        System.out.println(idToken);
             if (idToken != null) {
                 try {
                     decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+                    if (decodedToken != null) {
+                        System.out.println(decodedToken);
+                        FirebaseUser user = new FirebaseUser();
+                        user.setId(decodedToken.getUid());
+                        user.setUsername(decodedToken.getName());
+                        user.setEmail(decodedToken.getEmail());
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
+                                decodedToken, null);
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 } catch (FirebaseAuthException e) {
                     System.out.println(e.getErrorCode());
                 }
             }
-            if (decodedToken != null) {
-                FirebaseUser user = new FirebaseUser();
-                user.setId(decodedToken.getUid());
-                user.setUsername(decodedToken.getName());
-                user.setEmail(decodedToken.getEmail());
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
-                        decodedToken, null);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 

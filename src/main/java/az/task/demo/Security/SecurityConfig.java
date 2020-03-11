@@ -31,12 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     ObjectMapper objectMapper;
 
-//    @Bean
-//    public TokenFilter tokenAuthenticationFilter() {
-//        return new TokenFilter();
-//    }
-
-
+    @Bean
+    public TokenFilter tokenAuthenticationFilter() {
+        return new TokenFilter();
+    }
 
 
     @Bean
