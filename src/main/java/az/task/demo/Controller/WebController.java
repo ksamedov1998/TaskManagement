@@ -16,8 +16,7 @@ public class WebController {
     SecurityUtil securityUtil;
 
     @GetMapping("/me")
-    public void login(@RequestParam("username") String username ,@RequestParam("password") String password) {
-        System.out.println("asdasds");
+    public void login(@RequestParam("email") String email ,@RequestParam("password") String password) {
     }
 
 

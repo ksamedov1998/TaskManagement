@@ -42,8 +42,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        SecurityContext securityContext= SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authenticationToken);
         return authenticationToken;
     }
 
@@ -51,8 +49,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         SignInUser user=new SignInUser();
-        user.setEmail("ksamedov1998@gmail.com");
-        user.setPassword("Kamran98");
+        user.setEmail(request.getParameter("email"));
+        user.setPassword(request.getParameter("password"));
         ResponseEntity<SignInResponse> responseEntity=null;
         FirebaseAuth auth = FirebaseAuth.getInstance();
         RestTemplate restTemplate=new RestTemplate();
