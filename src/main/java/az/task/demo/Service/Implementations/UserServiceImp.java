@@ -34,7 +34,7 @@ public class UserServiceImp implements UserService {
     @Override
     public List<User> getUserListByStatus(int userStatus) {
         List<User> userList;
-        if(UserStatus.checkState(userStatus)){
+        if(UserStatus.checkStatus(userStatus)){
             userList=userRepository.findAllByStatusEquals(userStatus);
         }else{
             throw new StatusNotFoundException(userStatus,"USERSTATUS");
@@ -45,7 +45,7 @@ public class UserServiceImp implements UserService {
     @Override
     public List<User> getUserListByType(int userType) {
         List<User> userList;
-        if(UserStatus.checkState(userType)){
+        if(UserStatus.checkStatus(userType)){
             userList=userRepository.findAllByStatusEquals(userType);
         }else{
             throw new StatusNotFoundException(userType,"USERTYPE");
