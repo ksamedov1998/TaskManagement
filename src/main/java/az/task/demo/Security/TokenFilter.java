@@ -29,6 +29,7 @@ public class TokenFilter extends OncePerRequestFilter {
             String idToken = securityUtil.getTokenFromRequest(httpServletRequest);
             FirebaseToken decodedToken = null;
         System.out.println(idToken);
+        System.out.println("snth");
             if (idToken != null) {
                 try {
                     decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);

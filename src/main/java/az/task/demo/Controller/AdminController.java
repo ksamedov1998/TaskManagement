@@ -48,6 +48,7 @@ public class AdminController {
 
     @GetMapping(value = "/{adminID}")
     public User getAdminByID(@PathVariable(value = "adminID") int adminId){
+        System.out.println("asdas");
         return adminService.getAdminById(adminId);
     }
 

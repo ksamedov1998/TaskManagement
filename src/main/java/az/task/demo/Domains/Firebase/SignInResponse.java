@@ -59,4 +59,16 @@ public class SignInResponse {
     public void setRegistered(boolean registered) {
         this.registered = registered;
     }
+
+    @Override
+    public String toString() {
+        return "SignInResponse{" +
+                "idToken='" + idToken + '\'' +
+                ", email='" + email + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", expiresIn='" + expiresIn + '\'' +
+                ", localId='" + localId + '\'' +
+                ", registered=" + registered +
+                '}';
+    }
 }

@@ -17,13 +17,13 @@ import java.io.IOException;
 public class Firebase {
     @Bean
     public FirebaseApp firebaseInit() throws IOException {
-        FileInputStream refreshToken = new FileInputStream("/home/kamran/Desktop/taskmanagement-41a46-firebase-adminsdk-nd2wg-2731e63c32.json");
+        FileInputStream refreshToken = new FileInputStream("/home/kamran/Downloads/taskmanagement-41a46-firebase-adminsdk-nd2wg-e35f6d5b1d.json");
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(refreshToken))
                 .setDatabaseUrl("https://taskmanagement-41a46.firebaseio.com/")
-                .setProjectId("taskmanagement-41a46 ")
+                .setProjectId("taskmanagement-41a46")
                 .build();
-        return FirebaseApp.initializeApp(options,"smth");
+        return FirebaseApp.initializeApp(options);
     }
 
 }

@@ -58,10 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable().formLogin().disable().httpBasic().disable().exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint()).and().authorizeRequests()
                 .antMatchers("/admin/**").authenticated()
-                .anyRequest().permitAll()
-        .and()
-        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-        .addFilter(new RequestAuthFilter(authenticationManager()));
-//        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll();
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
