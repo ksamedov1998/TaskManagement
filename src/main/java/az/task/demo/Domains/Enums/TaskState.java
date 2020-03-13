@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum TaskState {
-    NOT_ASSIGNED(0),ASSIGNED(1),DONE(2),ARCHIVED(-1);
+    NOT_ASSIGNED(0),ASSIGNED(1),DONE(2),ARCHIVED(-1),EXPIRED(2);
     private int value;
 
     TaskState(int value){

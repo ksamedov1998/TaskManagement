@@ -1,5 +1,6 @@
 package az.task.demo.Repository;
 
+import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
 import org.hsqldb.HsqlException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,7 +26,7 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     void save(String header, String description, LocalDate assignDate, LocalDate deadline,@Param(value = "task_state") int taskState,@Param(value = "task_status") int taskStatus);
 
     @Modifying
-    @Query(value = "update Task set task_status:task_status where id:id",nativeQuery = true)
+    @Query(value = "update Task set task_status:task_status where id=:id",nativeQuery = true)
     @Transactional
     int updateTaskStatus(@Param(value = "task_status") int taskStatus,
                     @Param(value = "id") int taskId);
@@ -51,4 +52,11 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     @Query(value = "update Task set task_state=:taskState where id=:taskId",nativeQuery = true)
     @Transactional
     int updateTaskState(int taskId, int taskState);
+
+
+    @Query(value = "select u.email email,t.header header,t.assign_date assignDate,t.deadline deadline from Task t " +
+            "            join User_Task ut on ut.user_task=t.id " +
+            "             join User u  on ut.task_user=u.id " +
+            " where t.task_state = :assigned ", nativeQuery = true)
+    List<NoneExpiredTaskMapper> getNoneExpiredTask(@Param("assigned") int state);
 }

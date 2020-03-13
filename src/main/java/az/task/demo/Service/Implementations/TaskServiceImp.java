@@ -6,6 +6,7 @@ import az.task.demo.CustomExceptions.TaskNotFound;
 import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.TaskState;
 import az.task.demo.Domains.Enums.TaskStatus;
+import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
 import az.task.demo.Repository.TaskRepository;
 import az.task.demo.Repository.UserRepository;
@@ -34,6 +35,11 @@ public class TaskServiceImp implements TaskService {
 
     @Autowired
     private LogHandler logHandler;
+
+    @Override
+    public List<NoneExpiredTaskMapper> allNoneExpiredTaskList() {
+        return taskRepository.getNoneExpiredTask(TaskState.ASSIGNED.getValue());
+    }
 
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
@@ -104,6 +110,7 @@ public class TaskServiceImp implements TaskService {
         //  | needed to fix
 
         taskRepository.assignTaskToUser(taskId, userId);
+        taskRepository.updateTaskState(taskId,TaskState.ASSIGNED.getValue());
     }
 
     @Override

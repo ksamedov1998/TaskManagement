@@ -1,10 +1,12 @@
 package az.task.demo.Service;
 
+import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
 
 import java.util.List;
 
 public interface TaskService {
+    List<NoneExpiredTaskMapper> allNoneExpiredTaskList();
     void addTask(String header,String description,String assignDateStr,String deadlineStr);
     void updateTaskStatus(int taskId,int taskStatus);
     List<Task> getAllTasks();
