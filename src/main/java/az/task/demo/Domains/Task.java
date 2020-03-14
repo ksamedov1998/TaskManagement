@@ -25,7 +25,7 @@ public class Task implements Serializable {
     @JoinTable(name = "User_Task",
                     joinColumns = {@JoinColumn(name = "user_task")},
                     inverseJoinColumns = {@JoinColumn(name = "task_user")})
-    @JsonManagedReference
+    @JsonIgnore
     private List<User> listOfUsers;
 
     private String header;
@@ -83,13 +83,6 @@ public class Task implements Serializable {
         this.deadline = deadline;
     }
 
-    public List<User> getListOfUsers() {
-        return listOfUsers;
-    }
-
-    public void setListOfUsers(List<User> listOfUsers) {
-        this.listOfUsers = listOfUsers;
-    }
 
     public int getId() {
         return id;

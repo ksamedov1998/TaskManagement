@@ -1,11 +1,9 @@
 package az.task.demo.Configuration;
 
 
-import az.task.demo.Security.TokenFilter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
@@ -15,7 +13,7 @@ import java.io.IOException;
 @Configuration
 @Order(1)
 public class Firebase {
-    @Bean
+//    @Bean
     public FirebaseApp firebaseInit() throws IOException {
         FileInputStream refreshToken = new FileInputStream("/home/kamran/Downloads/taskmanagement-41a46-firebase-adminsdk-nd2wg-e35f6d5b1d.json");
         FirebaseOptions options = new FirebaseOptions.Builder()

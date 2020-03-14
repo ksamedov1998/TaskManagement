@@ -3,13 +3,9 @@ package az.task.demo.Controller;
 
 import az.task.demo.Domains.Firebase.SignInResponse;
 import az.task.demo.Domains.SignInUser;
-import az.task.demo.Security.SecurityUtil;
 import az.task.demo.Util.SecurityConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +18,8 @@ import java.net.URI;
 @RequestMapping("")
 public class WebController {
 
-    @Autowired
-    SecurityUtil securityUtil;
+//    @Autowired
+//    SecurityUtil securityUtil;
 
     @GetMapping("/me")
     public void login(@RequestParam("email") String email ,@RequestParam("password") String password) {
@@ -46,8 +42,4 @@ public class WebController {
     }
 
 
-    @GetMapping("/create/token")
-    public String getCustomToken() throws FirebaseAuthException {
-        return FirebaseAuth.getInstance().createCustomToken(String.valueOf(securityUtil.getPrincipal().getId()));
-    }
 }

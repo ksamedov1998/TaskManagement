@@ -21,7 +21,6 @@ public class User{
     @Column(name = "user_type")
     private int userType;
 
-    @JsonManagedReference
     @ManyToMany(mappedBy = "listOfUsers")
     private List<Task> taskList;
 

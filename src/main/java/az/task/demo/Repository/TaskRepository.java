@@ -36,7 +36,7 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     Optional<Task> getTaskById(int taskId);
 
     @Modifying
-    @Query(value = "insert into User_Task(user_task,task_user) values(:user_id,:task_id)",nativeQuery = true)
+    @Query(value = "insert into User_Task(user_task,task_user) values(:task_id,:user_id)",nativeQuery = true)
     @Transactional
     void assignTaskToUser(@Param(value ="task_id") int taskId,
                           @Param(value ="user_id") int userId) ;
