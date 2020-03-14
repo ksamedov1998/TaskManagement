@@ -12,6 +12,7 @@ import org.threeten.bp.temporal.TemporalUnit;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
@@ -43,34 +44,38 @@ public class MailSender {
 
 
     private void validateTasks(List<NoneExpiredTaskMapper> taskList) {
-        NoneExpiredTaskMapper taskMapper = null;
-//        todo logic here if one day send it at 12 hour otherwise the half of interval
+        NoneExpiredTaskMapper taskMapper;
         for (int i = 0; i < taskList.size(); i++) {
+            System.out.println(i);
             taskMapper = taskList.get(i);
-            if (getDaysBetween(taskMapper.getDeadline(), taskMapper.getAssignDate()) <= 1) {
+            if (getDaysBetween(taskMapper.getAssignDate(),taskMapper.getDeadline()) <= 1) {
+                System.out.println("<=1");
                     if(compareWithCurrentDate(taskMapper.getDeadline(),null,true)){
                         sendEmails(taskMapper);
                     }
             } else {
-                if(compareWithCurrentDate(taskMapper.getDeadline(),taskMapper.getAssignDate(),false)){
+                if(compareWithCurrentDate(taskMapper.getAssignDate(),taskMapper.getDeadline(),false)){
                     sendEmails(taskMapper);
                 }
+                System.out.println(">1");
             }
         }
 
     }
 
-    private boolean compareWithCurrentDate(LocalDate deadline,LocalDate assignDate,boolean isLessThanDay) {
+    private boolean compareWithCurrentDate(LocalDateTime deadline, LocalDateTime assignDate, boolean isLessThanDay) {
         boolean isReadyToNotify=false;
         if(isLessThanDay){
-            if(Period.between(LocalDate.now(),deadline).get(DAYS)==HALF_A_DAY){
+            if(LocalDateTime.now().until(deadline,HOURS)==HALF_A_DAY){
                 isReadyToNotify=true;
+                System.out.println("HALF");
             }
-            System.out.println(Period.between(LocalDate.now(),deadline).get(DAYS));
         }else{
-            if(DAYS.between(deadline,LocalDate.now()) == DAYS.between(deadline,assignDate)/2){
+            System.out.println("FULL");
+            if(LocalDateTime.now().until(deadline,DAYS) == deadline.until(assignDate,DAYS)/2){
                 isReadyToNotify=true;
             }
+            System.out.println(LocalDateTime.now().until(deadline,DAYS));
         }
          return isReadyToNotify;
     }
@@ -82,8 +87,8 @@ public class MailSender {
         System.out.println("Task assign date : " + taskMapper.getAssignDate());
         System.out.println("Task deadline : " + taskMapper.getDeadline());
     }
-    public long getDaysBetween(LocalDate d1, LocalDate d2) {
-        return DAYS.between(d1, d2);
+    public long getDaysBetween(LocalDateTime d1, LocalDateTime d2) {
+        return d1.until(d2,DAYS);
     }
 
 }
