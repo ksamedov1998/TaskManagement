@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +37,11 @@ public class Task implements Serializable {
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "assign_date")
-    private LocalDate assignDate;
+    private LocalDateTime assignDate;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "deadline")
-    private LocalDate deadline;
+    private LocalDateTime deadline;
 
     @Column(name = "task_status")
     private int taskStatus;
@@ -67,19 +68,19 @@ public class Task implements Serializable {
         this.taskState = taskState;
     }
 
-    public LocalDate getAssignDate() {
+    public LocalDateTime getAssignDate() {
         return assignDate;
     }
 
-    public void setAssignDate(LocalDate assignDate) {
+    public void setAssignDate(LocalDateTime assignDate) {
         this.assignDate = assignDate;
     }
 
-    public LocalDate getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(LocalDate deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 

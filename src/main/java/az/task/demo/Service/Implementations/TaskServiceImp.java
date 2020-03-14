@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -43,8 +44,8 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
-        LocalDate assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
-        LocalDate deadlineDate = StringToLocalDateConverter(deadlineStr); // throws Runtime exception
+        LocalDateTime assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
+        LocalDateTime deadlineDate = StringToLocalDateConverter(deadlineStr); // throws Runtime exception
         if (isAssignDateAfterDeadline(assignDate, deadlineDate)) {
             taskRepository.save(header, description, assignDate, deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED), TaskStatus.getStatus(TaskStatus.ACTIVE));
         } else {
@@ -115,7 +116,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void updateDeadline(int taskId, String newDeadline) {
-        LocalDate assignDate = StringToLocalDateConverter(newDeadline); //can throw Runtime exception
+        LocalDateTime assignDate = StringToLocalDateConverter(newDeadline); //can throw Runtime exception
         if(taskRepository.updateTaskDeadline(taskId, assignDate)==0){
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateDeadline")
@@ -154,7 +155,7 @@ public class TaskServiceImp implements TaskService {
 
     }
 
-    private boolean isAssignDateAfterDeadline(LocalDate assignDate, LocalDate deadlineDate) {
+    private boolean isAssignDateAfterDeadline(LocalDateTime assignDate, LocalDateTime deadlineDate) {
         boolean isAfter = false;
         if (deadlineDate.isAfter(assignDate)) {
             isAfter = true;
@@ -162,8 +163,8 @@ public class TaskServiceImp implements TaskService {
         return isAfter;
     }
 
-    private LocalDate StringToLocalDateConverter(String date) throws DateTimeParseException {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    private LocalDateTime StringToLocalDateConverter(String date) throws DateTimeParseException {
+        return  LocalDateTime.parse(date,DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
     private boolean updateTask(int taskId, int taskState) {
         return taskRepository.updateTaskState(taskId, taskState)==0;

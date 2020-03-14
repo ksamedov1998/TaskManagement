@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     @Modifying
     @Query(value = "insert into Task(header,description,assign_date,deadline,task_state,task_status) values(:header,:description,:assignDate,:deadline,:task_state,:task_status)",nativeQuery = true)
     @Transactional
-    void save(String header, String description, LocalDate assignDate, LocalDate deadline,@Param(value = "task_state") int taskState,@Param(value = "task_status") int taskStatus);
+    void save(String header, String description, LocalDateTime assignDate, LocalDateTime deadline,@Param(value = "task_state") int taskState,@Param(value = "task_status") int taskStatus);
 
     @Modifying
     @Query(value = "update Task set task_status:task_status where id=:id",nativeQuery = true)
@@ -45,7 +46,7 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     @Modifying
     @Query(value = "update Task set deadline=:newDeadline where id=:taskId",nativeQuery = true)
     @Transactional
-    int updateTaskDeadline(int taskId,LocalDate newDeadline);
+    int updateTaskDeadline(int taskId, LocalDateTime newDeadline);
 
 
     @Modifying
