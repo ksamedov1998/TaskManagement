@@ -162,6 +162,11 @@ public class TaskServiceImp implements TaskService {
             taskRepository.setTaskNotified(taskId);
     }
 
+    @Override
+    public void changeExpiredTaskStatus() {
+            taskRepository.changeExpiredTasksStatus(TaskState.EXPIRED.getValue());
+    }
+
     private boolean isAssignDateAfterDeadline(LocalDateTime assignDate, LocalDateTime deadlineDate) {
         boolean isAfter = false;
         if (deadlineDate.isAfter(assignDate)) {

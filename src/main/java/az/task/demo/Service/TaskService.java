@@ -15,4 +15,5 @@ public interface TaskService {
     void updateDeadline(int taskId,String newDeadline);
     void updateTaskState(int taskId,int taskState);
     void setTaskNotified(int taskId);
+    void changeExpiredTaskStatus();
 }

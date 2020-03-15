@@ -66,4 +66,10 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     @Query(value = "update Task set notified=true where id=:taskId",nativeQuery = true)
     @Transactional
     void setTaskNotified(int taskId);
+
+
+    @Modifying
+    @Query(value = "update Task set task_state=:state  where (TIMESTAMPDIFF(SECOND ,CURRENT_TIMESTAMP(),deadline) <= 0 ) ; ",nativeQuery = true)
+    @Transactional
+    void changeExpiredTasksStatus(int state);
 }

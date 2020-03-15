@@ -1,7 +1,6 @@
 package az.task.demo.Util;
 
 import az.task.demo.Domains.NoneExpiredTaskMapper;
-import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
