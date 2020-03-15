@@ -1,6 +1,7 @@
 package az.task.demo.Util;
 
 import az.task.demo.Domains.NoneExpiredTaskMapper;
+import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,16 +22,18 @@ public class MailSenderUtil {
     private static final long  HALF_A_DAY=12;
 
     public  void validateTasksAndSend(List<NoneExpiredTaskMapper> taskList) {
-        NoneExpiredTaskMapper taskMapper;
+        NoneExpiredTaskMapper task;
+
         for (int i = 0; i < taskList.size(); i++) {
-            taskMapper = taskList.get(i);
-            if (getDaysBetween(taskMapper.getAssignDate(),taskMapper.getDeadline()) <= 1) {
-                if(compareWithCurrentDate(taskMapper.getDeadline(),null,true)){
-                    sendEmails(taskMapper);
+            task = taskList.get(i);
+                // if deadline and assign date in row
+            if (getDaysBetween(task.getAssignDate(),task.getDeadline()) <= 1) {
+                if(compareWithCurrentDate(task.getDeadline(),null,true)){
+                    sendEmails(task);
                 }
             } else {
-                if(compareWithCurrentDate(taskMapper.getAssignDate(),taskMapper.getDeadline(),false)){
-                    sendEmails(taskMapper);
+                if(compareWithCurrentDate(task.getAssignDate(),task.getDeadline(),false)){
+                    sendEmails(task);
                 }
             }
         }
@@ -38,12 +41,14 @@ public class MailSenderUtil {
     }
 
     private  boolean compareWithCurrentDate(LocalDateTime deadline, LocalDateTime assignDate, boolean isLessThanDay) {
+            // if there is only one day for task isLessThanDay is true otherwise false
         boolean isReadyToNotify=false;
         if(isLessThanDay){
             if(deadline.until(LocalDateTime.now(),HOURS)==HALF_A_DAY){
                 isReadyToNotify=true;
             }
         }else{
+            // if this time is the mean of deadline and assign date
             if(deadline.until(LocalDateTime.now(),HOURS) == deadline.until(assignDate,HOURS)/2){
                 isReadyToNotify=true;
             }
@@ -51,16 +56,17 @@ public class MailSenderUtil {
         return isReadyToNotify;
     }
 
+        // get days between two date
     private  long getDaysBetween(LocalDateTime d1, LocalDateTime d2) {
         return d1.until(d2,DAYS);
     }
 
 
-    private  void sendEmails(NoneExpiredTaskMapper taskMapper){
-        System.out.println("User email : " + taskMapper.getEmail());
-        System.out.println("Task header : " + taskMapper.getHeader());
-        System.out.println("Task assign date : " + taskMapper.getAssignDate());
-        System.out.println("Task deadline : " + taskMapper.getDeadline());
-        taskService.setTaskNotified(taskMapper.getId());
+    private  void sendEmails(NoneExpiredTaskMapper task){
+        System.out.println("User email : " + task.getEmail());
+        System.out.println("Task header : " + task.getHeader());
+        System.out.println("Task assign date : " + task.getAssignDate());
+        System.out.println("Task deadline : " + task.getDeadline());
+        taskService.setTaskNotified(task.getId());
     }
 }
