@@ -55,9 +55,15 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
     int updateTaskState(int taskId, int taskState);
 
 
-    @Query(value = "select u.email email,t.header header,t.assign_date assignDate,t.deadline deadline from Task t " +
+    @Query(value = "select u.email email,t.header header,t.id,t.assign_date assignDate,t.deadline deadline from Task t " +
             "            join User_Task ut on ut.user_task=t.id " +
             "             join User u  on ut.task_user=u.id " +
             " where t.task_state = :assigned ", nativeQuery = true)
     List<NoneExpiredTaskMapper> getNoneExpiredTask(@Param("assigned") int state);
+
+
+    @Modifying
+    @Query(value = "update Task set notified=true where id=:taskId",nativeQuery = true)
+    @Transactional
+    void setTaskNotified(int taskId);
 }

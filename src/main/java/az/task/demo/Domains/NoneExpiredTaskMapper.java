@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 public interface NoneExpiredTaskMapper {
 
+    int getId();
+
     String getEmail();
 
     String getHeader();

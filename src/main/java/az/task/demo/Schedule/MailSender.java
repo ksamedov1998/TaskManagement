@@ -3,6 +3,7 @@ package az.task.demo.Schedule;
 import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
 import az.task.demo.Service.TaskService;
+import az.task.demo.Util.MailSenderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,8 +26,9 @@ import static java.time.temporal.ChronoUnit.HOURS;
 public class MailSender {
     private TaskService service;
     private final int MIN_MAIL_SIZE = 10;
-    private final long  HALF_A_DAY=12;
 
+    @Autowired
+    private MailSenderUtil mailSenderUtil;
 
     @Autowired
     public MailSender(TaskService service) {
@@ -37,58 +39,11 @@ public class MailSender {
     @Async
     public void getTasks() {
         List<NoneExpiredTaskMapper> taskList = service.allNoneExpiredTaskList();
-        if (taskList.size() > 0/*MIN_MAIL_SIZE*/) {
-            validateTasks(taskList);
+        if (taskList.size() > MIN_MAIL_SIZE) {
+            mailSenderUtil. validateTasksAndSend(taskList);
         }
     }
 
 
-    private void validateTasks(List<NoneExpiredTaskMapper> taskList) {
-        NoneExpiredTaskMapper taskMapper;
-        for (int i = 0; i < taskList.size(); i++) {
-            System.out.println(i);
-            taskMapper = taskList.get(i);
-            if (getDaysBetween(taskMapper.getAssignDate(),taskMapper.getDeadline()) <= 1) {
-                System.out.println("<=1");
-                    if(compareWithCurrentDate(taskMapper.getDeadline(),null,true)){
-                        sendEmails(taskMapper);
-                    }
-            } else {
-                if(compareWithCurrentDate(taskMapper.getAssignDate(),taskMapper.getDeadline(),false)){
-                    sendEmails(taskMapper);
-                }
-                System.out.println(">1");
-            }
-        }
-
-    }
-
-    private boolean compareWithCurrentDate(LocalDateTime deadline, LocalDateTime assignDate, boolean isLessThanDay) {
-        boolean isReadyToNotify=false;
-        if(isLessThanDay){
-            if(LocalDateTime.now().until(deadline,HOURS)==HALF_A_DAY){
-                isReadyToNotify=true;
-                System.out.println("HALF");
-            }
-        }else{
-            System.out.println("FULL");
-            if(LocalDateTime.now().until(deadline,DAYS) == deadline.until(assignDate,DAYS)/2){
-                isReadyToNotify=true;
-            }
-            System.out.println(LocalDateTime.now().until(deadline,DAYS));
-        }
-         return isReadyToNotify;
-    }
-
-
-    public void sendEmails(NoneExpiredTaskMapper taskMapper){
-        System.out.println("User email : " + taskMapper.getEmail());
-        System.out.println("Task header : " + taskMapper.getHeader());
-        System.out.println("Task assign date : " + taskMapper.getAssignDate());
-        System.out.println("Task deadline : " + taskMapper.getDeadline());
-    }
-    public long getDaysBetween(LocalDateTime d1, LocalDateTime d2) {
-        return d1.until(d2,DAYS);
-    }
 
 }

@@ -2,6 +2,7 @@ package az.task.demo.Domains;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.api.client.util.Value;
 import net.minidev.json.annotate.JsonIgnore;
 import org.aspectj.lang.annotation.After;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -49,7 +50,18 @@ public class Task implements Serializable {
     @Column(name = "task_state")
     private int taskState;
 
+    @Column(columnDefinition = "boolean default false")
+    public boolean notified;
+
     public Task() {
+    }
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
     }
 
     public int getTaskStatus() {

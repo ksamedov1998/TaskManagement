@@ -42,6 +42,8 @@ public class TaskServiceImp implements TaskService {
         return taskRepository.getNoneExpiredTask(TaskState.ASSIGNED.getValue());
     }
 
+
+
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
         LocalDateTime assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
@@ -153,6 +155,11 @@ public class TaskServiceImp implements TaskService {
             throw new StatusNotFoundException(taskState,"TASKSTATE");
         }
 
+    }
+
+    @Override
+    public void setTaskNotified(int taskId) {
+            taskRepository.setTaskNotified(taskId);
     }
 
     private boolean isAssignDateAfterDeadline(LocalDateTime assignDate, LocalDateTime deadlineDate) {
