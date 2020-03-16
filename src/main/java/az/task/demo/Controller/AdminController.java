@@ -15,11 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -48,7 +44,6 @@ public class AdminController {
 
     @GetMapping(value = "/{adminID}")
     public User getAdminByID(@PathVariable(value = "adminID") int adminId){
-        System.out.println("asdas");
         return adminService.getAdminById(adminId);
     }
 
@@ -66,7 +61,6 @@ public class AdminController {
     public void deleteUser(@PathVariable(value = "userID") int userId){
         adminService.deleteUserById(userId);
     }
-
 
 
 

@@ -8,9 +8,11 @@ import az.task.demo.Domains.Enums.TaskState;
 import az.task.demo.Domains.Enums.TaskStatus;
 import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
+import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Repository.TaskRepository;
 import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.TaskService;
+import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,10 @@ public class TaskServiceImp implements TaskService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private HibernateRepository hibernateRepository;
 
     @Autowired
     private LogHandler logHandler;
@@ -157,6 +163,22 @@ public class TaskServiceImp implements TaskService {
 
     }
 
+    @Override
+    public void updateTask(int taskId, Task task) {
+        String query= DynamicQueryUtil.createQuery(taskId,task);
+        if(!hibernateRepository.update(query)){
+            logHandler.publish(new LogBuilder()
+                    .setPoint("TaskServiceImp.updateTask")
+                    .setException("TaskNotFoundException")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
+            throw new TaskNotFound(taskId);
+        }
+    }
+
+    private boolean isAssignDateAfterDeadline(LocalDate assignDate, LocalDate deadlineDate) {
     @Override
     public void setTaskNotified(int taskId) {
             taskRepository.setTaskNotified(taskId);
