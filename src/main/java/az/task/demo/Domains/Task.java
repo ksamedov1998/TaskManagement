@@ -36,11 +36,11 @@ public class Task implements Serializable {
 
 //    Comment add -> add reply Comment
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "assign_date")
     private LocalDateTime assignDate;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "deadline")
     private LocalDateTime deadline;
 
@@ -50,10 +50,21 @@ public class Task implements Serializable {
     @Column(name = "task_state")
     private int taskState;
 
+    @OneToMany(mappedBy = "task")
+    private List<Comment> commentList;
+
     @Column(columnDefinition = "boolean default false")
     public boolean notified;
 
     public Task() {
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     public boolean isNotified() {

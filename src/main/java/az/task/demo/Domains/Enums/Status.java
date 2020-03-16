@@ -4,21 +4,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum TaskStatus {
+public enum Status {
     ACTIVE(0),DELETED(1);
     private int value;
 
-    TaskStatus(int value){
+    Status(int value){
         this.value=value;
     }
 
-    public static int getStatus(TaskStatus userType){
-        List<TaskStatus> type= Arrays.stream(TaskStatus.values()).filter(a->a==userType).collect(Collectors.toList());
+    public static int getStatus(Status userType){
+        List<Status> type= Arrays.stream(Status.values()).filter(a->a==userType).collect(Collectors.toList());
         return type.get(0).value;
     }
 
     public static boolean checkState(int taskStatusValue){
-        return Arrays.stream(TaskStatus.values()).anyMatch(a->a.getValue()==taskStatusValue);
+        return Arrays.stream(Status.values()).anyMatch(a->a.getValue()==taskStatusValue);
     }
 
     public int getValue() {

@@ -5,7 +5,7 @@ import az.task.demo.CustomExceptions.StatusNotFoundException;
 import az.task.demo.CustomExceptions.TaskNotFound;
 import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.TaskState;
-import az.task.demo.Domains.Enums.TaskStatus;
+import az.task.demo.Domains.Enums.Status;
 import az.task.demo.Domains.NoneExpiredTaskMapper;
 import az.task.demo.Domains.Task;
 import az.task.demo.Repository.HibernateRepository;
@@ -16,10 +16,8 @@ import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -54,7 +52,7 @@ public class TaskServiceImp implements TaskService {
         LocalDateTime assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
         LocalDateTime deadlineDate = StringToLocalDateConverter(deadlineStr); // throws Runtime exception
         if (isAssignDateAfterDeadline(assignDate, deadlineDate)) {
-            taskRepository.save(header, description, assignDate, deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED), TaskStatus.getStatus(TaskStatus.ACTIVE));
+            taskRepository.save(header, description, assignDate, deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED), Status.getStatus(Status.ACTIVE));
         } else {
             throw new DateTimeException("Inconsistency between " + deadlineStr + " and  " + assignDateStr + "[ Deadline should be after Assignment date ]");
         }
@@ -62,7 +60,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void updateTaskStatus(int taskId, int taskStatus) {
-        if (!TaskStatus.checkState(taskStatus)) {
+        if (!Status.checkState(taskStatus)) {
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateTaskStatus")
                     .setException("StatusNotFoundException")
