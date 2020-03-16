@@ -49,7 +49,6 @@ public class TaskServiceImp implements TaskService {
     }
 
 
-
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
         LocalDateTime assignDate = StringToLocalDateConverter(assignDateStr); //throws Runtime exception
@@ -119,13 +118,13 @@ public class TaskServiceImp implements TaskService {
         //  | needed to fix
 
         taskRepository.assignTaskToUser(taskId, userId);
-        taskRepository.updateTaskState(taskId,TaskState.ASSIGNED.getValue());
+        taskRepository.updateTaskState(taskId, TaskState.ASSIGNED.getValue());
     }
 
     @Override
     public void updateDeadline(int taskId, String newDeadline) {
         LocalDateTime assignDate = StringToLocalDateConverter(newDeadline); //can throw Runtime exception
-        if(taskRepository.updateTaskDeadline(taskId, assignDate)==0){
+        if (taskRepository.updateTaskDeadline(taskId, assignDate) == 0) {
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateDeadline")
                     .setException("TaskNotFoundException")
@@ -135,12 +134,12 @@ public class TaskServiceImp implements TaskService {
             );
             throw new TaskNotFound(taskId);
         }
-        }
+    }
 
     @Override
     public void updateTaskState(int taskId, int taskState) {
         if (TaskState.checkState(taskState)) {
-            if(updateTask(taskId,taskState)){
+            if (updateTask(taskId, taskState)) {
                 logHandler.publish(new LogBuilder()
                         .setPoint("TaskServiceImp.updateTask")
                         .setException("TaskNotFoundException")
@@ -158,15 +157,15 @@ public class TaskServiceImp implements TaskService {
                     .setState("FAIL")
                     .build()
             );
-            throw new StatusNotFoundException(taskState,"TASKSTATE");
+            throw new StatusNotFoundException(taskState, "TASKSTATE");
         }
 
     }
 
     @Override
     public void updateTask(int taskId, Task task) {
-        String query= DynamicQueryUtil.createQuery(taskId,task);
-        if(!hibernateRepository.update(query)){
+        String query = DynamicQueryUtil.createQuery(taskId, task);
+        if (!hibernateRepository.update(query)) {
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateTask")
                     .setException("TaskNotFoundException")
@@ -178,15 +177,15 @@ public class TaskServiceImp implements TaskService {
         }
     }
 
-    private boolean isAssignDateAfterDeadline(LocalDate assignDate, LocalDate deadlineDate) {
+
     @Override
     public void setTaskNotified(int taskId) {
-            taskRepository.setTaskNotified(taskId);
+        taskRepository.setTaskNotified(taskId);
     }
 
     @Override
     public void changeExpiredTaskStatus() {
-            taskRepository.changeExpiredTasksStatus(TaskState.EXPIRED.getValue());
+        taskRepository.changeExpiredTasksStatus(TaskState.EXPIRED.getValue());
     }
 
     private boolean isAssignDateAfterDeadline(LocalDateTime assignDate, LocalDateTime deadlineDate) {
@@ -197,10 +196,14 @@ public class TaskServiceImp implements TaskService {
         return isAfter;
     }
 
-    private LocalDateTime StringToLocalDateConverter(String date) throws DateTimeParseException {
-        return  LocalDateTime.parse(date,DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-    }
+
     private boolean updateTask(int taskId, int taskState) {
-        return taskRepository.updateTaskState(taskId, taskState)==0;
+        return taskRepository.updateTaskState(taskId, taskState) == 0;
+    }
+
+    private LocalDateTime StringToLocalDateConverter(String date) throws DateTimeParseException {
+        return LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 }
+
+
