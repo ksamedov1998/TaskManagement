@@ -20,12 +20,12 @@ public class Comment {
 
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @CreationTimestamp
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private LocalDateTime date;
+    @Column("insert_date")
+    private LocalDateTime insertDate;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @UpdateTimestamp
-    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column("delete_date")
     private LocalDateTime deleteDate;
 
     private int status;
@@ -40,6 +40,8 @@ public class Comment {
     public LocalDateTime getDeleteDate() {
         return deleteDate;
     }
+
+
 
     public void setDeleteDate(LocalDateTime deleteDate) {
         this.deleteDate = deleteDate;
