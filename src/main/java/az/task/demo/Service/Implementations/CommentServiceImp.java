@@ -1,6 +1,7 @@
 package az.task.demo.Service.Implementations;
 
 import az.task.demo.Domains.Comment;
+import az.task.demo.Domains.Enums.Status;
 import az.task.demo.Domains.Task;
 import az.task.demo.Repository.CommentRepository;
 import az.task.demo.Service.CommentService;
@@ -15,7 +16,8 @@ public class CommentServiceImp implements CommentService {
     @Override
     public void addComment(int taskId, Comment comment) {
             // exception task not found
-            commentRepository.save(comment);
+            comment.setStatus(Status.ACTIVE.getValue());
+            commentRepository.save(taskId,comment);
     }
 
     @Override

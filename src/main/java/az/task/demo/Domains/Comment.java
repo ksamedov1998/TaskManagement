@@ -5,12 +5,17 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class Comment {
+@Component
+public class Comment implements Serializable {
+    private static final long serialVersionUID = 268345117934850758L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,12 +25,12 @@ public class Comment {
 
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @CreationTimestamp
-    @Column("insert_date")
+    @Column(name = "insert_date")
     private LocalDateTime insertDate;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @UpdateTimestamp
-    @Column("delete_date")
+    @Column(name = "delete_date")
     private LocalDateTime deleteDate;
 
     private int status;
@@ -63,13 +68,14 @@ public class Comment {
         this.commentText = commentText;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getInsertDate() {
+        return insertDate;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setInsertDate(LocalDateTime insertDate) {
+        this.insertDate = insertDate;
     }
+
 
     public int getStatus() {
         return status;
@@ -77,5 +83,17 @@ public class Comment {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", commentText='" + commentText + '\'' +
+                ", insertDate=" + insertDate +
+                ", deleteDate=" + deleteDate +
+                ", status=" + status +
+                ", task=" + task +
+                '}';
     }
 }
