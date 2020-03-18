@@ -4,8 +4,10 @@ package az.task.demo.Configuration;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,4 +26,8 @@ public class Firebase {
         return FirebaseApp.initializeApp(options);
     }
 
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
 }

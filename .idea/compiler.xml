@@ -7,15 +7,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="autherization-service" />
+        <module name="auth-service" />
         <module name="demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auth-service" target="11" />
+      <module name="autherization-service" target="1.8" />
       <module name="demo" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service" options="-parameters" />
+      <module name="autherization-service" options="-parameters" />
       <module name="demo" options="-parameters" />
     </option>
   </component>

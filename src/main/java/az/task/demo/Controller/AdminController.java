@@ -3,6 +3,7 @@ package az.task.demo.Controller;
 
 import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.Log;
+import az.task.demo.Domains.SignInUser;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
 import az.task.demo.Service.UserService;
@@ -13,9 +14,13 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -48,13 +53,13 @@ public class AdminController {
     }
 
     @PostMapping(value = "/add/user")
-    public void addUser(@RequestParam(value = "username") String username,
-                        @RequestParam(value = "email") String email,
-                        @RequestParam(value = "password") String password,
-                        @RequestParam(value = "type") int userType
-    ){
-     password=PasswordUtil.encryptPassword(password);
-        adminService.addUser(username,email,password,userType, UserStatus.getStatus(UserStatus.ACTIVE));
+    public void addUser(@RequestBody SignInUser user){
+        RestTemplate restTemplate= new RestTemplate();
+        RequestEntity<SignInUser> requestEntity=RequestEntity
+                .post(URI.create("http://localhost:8081/service/add/user"))
+                .accept(MediaType.APPLICATION_JSON)
+                .body(user);
+        ResponseEntity<Void> responseEntity=restTemplate.exchange(requestEntity,Void.class);
     }
 
     @GetMapping("/delete/{userID}")

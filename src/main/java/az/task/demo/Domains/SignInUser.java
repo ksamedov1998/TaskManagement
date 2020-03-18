@@ -3,21 +3,12 @@ package az.task.demo.Domains;
 public class SignInUser {
     private String email;
     private String password;
-    private boolean returnSecureToken=true;
 
     public SignInUser() {
     }
 
 
-    public boolean isReturnSecureToken() {
-        return returnSecureToken;
-    }
-
-    public void setReturnSecureToken(boolean returnSecureToken) {
-        this.returnSecureToken = returnSecureToken;
-    }
-
-    public String getEmail() {
+     public String getEmail() {
         return email;
     }
 
