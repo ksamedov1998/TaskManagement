@@ -1,7 +1,9 @@
 package az.task.demo.Controller;
 
 
+import az.task.demo.Domains.AuthorizationServiceRequestUser;
 import az.task.demo.Domains.Enums.UserStatus;
+import az.task.demo.Domains.Firebase.AuthenticationServiceResponseUser;
 import az.task.demo.Domains.Log;
 import az.task.demo.Domains.SignInUser;
 import az.task.demo.Domains.User;
@@ -33,6 +35,9 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
     private UserService userService;
 
 
@@ -54,12 +59,22 @@ public class AdminController {
 
     @PostMapping(value = "/add/user")
     public void addUser(@RequestBody SignInUser user){
-        RestTemplate restTemplate= new RestTemplate();
+
         RequestEntity<SignInUser> requestEntity=RequestEntity
                 .post(URI.create("http://localhost:8081/service/add/user"))
                 .accept(MediaType.APPLICATION_JSON)
                 .body(user);
-        ResponseEntity<Void> responseEntity=restTemplate.exchange(requestEntity,Void.class);
+        ResponseEntity<AuthenticationServiceResponseUser> responseEntity=restTemplate.exchange(requestEntity,AuthenticationServiceResponseUser.class);
+
+        AuthorizationServiceRequestUser requestUser=new AuthorizationServiceRequestUser();
+        requestUser.setId(responseEntity.getBody().getId());
+        requestUser.setRole(user.getRole());
+        RequestEntity<AuthorizationServiceRequestUser> authorizationRequestEntity=RequestEntity
+                .post(URI.create("http://localhost:8082/service/autho"))
+                .accept(MediaType.APPLICATION_JSON)
+                .body(requestUser);
+        ResponseEntity<Void> authorizationResponseEntity=restTemplate.exchange(authorizationRequestEntity,Void.class);
+
     }
 
     @GetMapping("/delete/{userID}")

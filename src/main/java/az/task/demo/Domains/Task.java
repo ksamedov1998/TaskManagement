@@ -24,7 +24,7 @@ public class Task implements Serializable {
     private int id;
 
     @ManyToMany()
-    @JoinTable(name = "User_Task",
+    @JoinTable(name = "\"User_Task\"",
                     joinColumns = {@JoinColumn(name = "user_task")},
                     inverseJoinColumns = {@JoinColumn(name = "task_user")})
     @JsonIgnore

@@ -4,8 +4,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$USER_HOME$/Desktop/auth-service/pom.xml" />
-        <option value="$USER_HOME$/Desktop/autherization-service/pom.xml" />
       </list>
     </option>
   </component>

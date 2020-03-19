@@ -17,8 +17,6 @@ import java.net.URI;
 @RequestMapping("")
 public class WebController {
 
-
-
 //    @Autowired
 //    SecurityUtil securityUtil;
 
