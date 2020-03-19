@@ -23,13 +23,11 @@ public class Comment implements Serializable {
     @Column(name = "text")
     private String commentText;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @CreationTimestamp
-    @Column(name = "insert_date")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Column(name = "insert_date" ,columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime insertDate;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @UpdateTimestamp
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
 

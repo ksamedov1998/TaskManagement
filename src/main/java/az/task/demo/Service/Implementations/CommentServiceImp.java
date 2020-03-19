@@ -16,6 +16,7 @@ public class CommentServiceImp implements CommentService {
     @Override
     public void addComment(int taskId, Comment comment) {
             // exception task not found
+
             comment.setStatus(Status.ACTIVE.getValue());
             commentRepository.save(taskId,comment);
     }

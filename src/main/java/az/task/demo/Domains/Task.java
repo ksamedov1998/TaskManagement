@@ -2,9 +2,12 @@ package az.task.demo.Domains;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.api.client.util.Value;
 import net.minidev.json.annotate.JsonIgnore;
 import org.aspectj.lang.annotation.After;
+import org.hibernate.annotations.Type;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
@@ -36,11 +39,9 @@ public class Task implements Serializable {
 
 //    Comment add -> add reply Comment
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "assign_date")
     private LocalDateTime assignDate;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "deadline")
     private LocalDateTime deadline;
 
