@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/web")
 public class WebController {
 
 //    @Autowired
