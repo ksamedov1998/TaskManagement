@@ -1,12 +1,12 @@
 package az.task.demo.Controller;
 
-import az.task.demo.CustomExceptions.TaskNotFound;
+import az.task.demo.Domains.RequestBodies.TaskCreationRequestBody;
+import az.task.demo.Domains.RequestBodies.UpdateTaskStateRequestBody;
 import az.task.demo.Domains.Task;
-import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Service.TaskService;
-import az.task.demo.Util.DynamicQueryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -23,9 +23,8 @@ public class TaskController {
     }
 
     @GetMapping(value = "/{taskId}/state/{state}")
-    public void updateTaskState(@PathVariable(value = "taskId") int taskId,
-                                @PathVariable(value = "state") int state){
-        taskService.updateTaskState(taskId,state);
+    public void updateTaskState(@RequestBody UpdateTaskStateRequestBody updateTaskStateRequestBody){
+        taskService.updateTaskState(updateTaskStateRequestBody.getTaskId(),updateTaskStateRequestBody.getState());
     }
 
     @GetMapping(value = "/{taskId}")
@@ -34,16 +33,13 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public void createTask(@RequestParam(value = "header") String header,
-                           @RequestParam(value = "desc") String description,
-                           @RequestParam(value = "assignDate") String assignDate,
-                           @RequestParam(value = "deadline") String deadline){
-        taskService.addTask(header,description,assignDate,deadline);
+    public void createTask(@RequestBody TaskCreationRequestBody requestBody){
+        taskService.addTask(requestBody.getHeader(),requestBody.getDesc(),requestBody.getAssignDate(),requestBody.getDeadline());
     }
 
-    @GetMapping("/update/{taskId}/status/{newStatus}")
+    @PatchMapping("/set/status/{taskId}")
     public void updateTaskStatus(@PathVariable(value = "taskId") int taskId,
-                           @PathVariable(value = "newStatus") int status){
+                                @RequestParam(value = "newStatus") int status){
         taskService.updateTaskStatus(taskId,status);
     }
 
@@ -58,10 +54,9 @@ public class TaskController {
         taskService.updateDeadline(taskId,newDeadline);
     }
 
-    @PostMapping("/update/{taskId}")
+    @PutMapping("/update/{taskId}")
     public void updateTask(@PathVariable(value = "taskId") int taskId,
                             @RequestBody Task task){
-        System.out.println("smth");
         taskService.updateTask(taskId,task);
     }
 

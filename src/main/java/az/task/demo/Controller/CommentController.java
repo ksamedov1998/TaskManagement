@@ -18,12 +18,12 @@ public class CommentController {
         commentService.addComment(taskId,comment);
     }
 
-    @GetMapping("/delete/{commentId}")
+    @DeleteMapping("/delete/{commentId}")
     public void deleteComment(@PathVariable("commentId") int commentId){
             commentService.deleteComment(commentId);
     }
 
-    @GetMapping("/update/{commentId}")
+    @PatchMapping("/update/{commentId}")
     public void updateComment(@PathVariable("commentId") int commentId,
                                 Comment comment){
         commentService.updateComment(commentId,comment);

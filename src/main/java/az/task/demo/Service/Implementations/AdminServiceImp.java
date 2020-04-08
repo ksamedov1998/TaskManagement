@@ -5,11 +5,10 @@ import az.task.demo.CustomExceptions.StatusNotFoundException;
 import az.task.demo.CustomExceptions.UserNotFound;
 import az.task.demo.Domains.Enums.UserStatus;
 import az.task.demo.Domains.Enums.UserType;
+import az.task.demo.Domains.RequestBodies.UserCreatingRequestBody;
 import az.task.demo.Domains.User;
 import az.task.demo.Repository.AdminRepository;
-import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Service.AdminService;
-import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,41 +49,13 @@ public class AdminServiceImp implements AdminService {
 
 
     @Override
-    public List<User> getAdminList() {
-        return adminRepository.getAdminList();
+    public void addUser(UserCreatingRequestBody body) {
+        body.setUserStatus(UserStatus.ACTIVE.getValue());
+        body.setPassword(PasswordUtil.encryptPassword(body.getPassword()));
+        checkUserType(body.getUserType());
+        adminRepository.saveUser(body);
     }
 
-
-    @Override
-    public void addUser(String username, String email, String password, int userType, int status) {
-        checkUserTypeAndStatus(userType,status);
-        adminRepository.saveUser(username,email,password,userType,status);
-    }
-
-    private void checkUserTypeAndStatus(int userType, int status) throws StatusNotFoundException{
-        if(!UserType.checkType(userType)){
-            logHandler.publish(new LogBuilder()
-                    .setPoint("AdminServiceImp.addUser")
-                    .setException("StatusNotFoundException")
-                    .setDescription("UserType is not correct")
-                    .setLevel(Level.INFO.getName())
-                    .setState("FAIL")
-                    .build()
-            );
-            throw new StatusNotFoundException(status,"USERTYPE");
-        }
-        if(!UserStatus.checkStatus(status)){
-            logHandler.publish(new LogBuilder()
-                    .setPoint("AdminServiceImp.addUser")
-                    .setException("StatusNotFoundException")
-                    .setDescription("UserStatus is not correct")
-                    .setLevel(Level.INFO.getName())
-                    .setState("FAIL")
-                    .build()
-            );
-            throw new StatusNotFoundException(status,"USERSTATUS");
-        }
-    }
 
 
     @Override
@@ -101,11 +72,20 @@ public class AdminServiceImp implements AdminService {
         }
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return adminRepository.findAll();
+
+
+    private void checkUserType(int userType) throws StatusNotFoundException{
+        if(!UserType.checkType(userType)){
+            logHandler.publish(new LogBuilder()
+                    .setPoint("AdminServiceImp.addUser")
+                    .setException("StatusNotFoundException")
+                    .setDescription("UserType is not correct")
+                    .setLevel(Level.INFO.getName())
+                    .setState("FAIL")
+                    .build()
+            );
+            throw new StatusNotFoundException(userType,"USERTYPE");
+        }
     }
-
-
 
 }

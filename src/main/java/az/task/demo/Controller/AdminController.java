@@ -2,67 +2,54 @@ package az.task.demo.Controller;
 
 
 import az.task.demo.Domains.Enums.UserStatus;
-import az.task.demo.Domains.Log;
+import az.task.demo.Domains.RequestBodies.UserCreatingRequestBody;
 import az.task.demo.Domains.User;
 import az.task.demo.Service.AdminService;
 import az.task.demo.Service.UserService;
-import az.task.demo.Util.LogHandler;
 import az.task.demo.Util.PasswordUtil;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import org.jsondoc.core.annotation.ApiMethod;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
-import java.util.logging.Level;
 
 @RestController
 @RequestMapping(value = "/admin")
 public class AdminController {
 
+    private final AdminService adminService;
+    private final UserService userService;
 
-    @Autowired
-    private AdminService adminService;
+    public AdminController(AdminService adminService, UserService userService) {
+        this.adminService = adminService;
+        this.userService = userService;
+    }
 
-    @Autowired
-    private UserService userService;
 
-
-    @GetMapping(value = "/users/type/{user_type}")
-    public List<User> getUserListByType(@PathVariable(value = "user_type") int userType){
+    @GetMapping(value = "/users")
+    public List<User> getUserListByType(@RequestParam(value = "user_type") int userType) {
         return userService.getUserListByType(userType);
     }
 
 
-    @GetMapping(value = "/users/status//{status}")
-    public List<User> getUserListByStatus(@PathVariable(value = "status") int status){
+    @GetMapping(value = "/users}")
+    public List<User> getUserListByStatus(@PathVariable(value = "status") int status) {
         return userService.getUserListByStatus(status);
     }
 
     @GetMapping(value = "/{adminID}")
-    public User getAdminByID(@PathVariable(value = "adminID") int adminId){
+    public User getAdminByID(@PathVariable(value = "adminID") int adminId) {
         return adminService.getAdminById(adminId);
     }
 
     @PostMapping(value = "/add/user")
-    public void addUser(@RequestParam(value = "username") String username,
-                        @RequestParam(value = "email") String email,
-                        @RequestParam(value = "password") String password,
-                        @RequestParam(value = "type") int userType
-    ){
-     password=PasswordUtil.encryptPassword(password);
-        adminService.addUser(username,email,password,userType, UserStatus.getStatus(UserStatus.ACTIVE));
+    public void addUser(@RequestBody UserCreatingRequestBody userCreatingRequestBody) {
+        adminService.addUser(userCreatingRequestBody);
     }
 
-    @GetMapping("/delete/{userID}")
-    public void deleteUser(@PathVariable(value = "userID") int userId){
+    @DeleteMapping("/delete/{userID}")
+    public void deleteUser(@PathVariable(value = "userID") int userId) {
         adminService.deleteUserById(userId);
     }
-
 
 
 }

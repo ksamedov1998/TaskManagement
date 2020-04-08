@@ -34,7 +34,6 @@ public class UserServiceImp implements UserService {
         Optional<User> user=userRepository.getUserById(userId);
         if(!user.isPresent()){
             throw new UserNotFound(userId);
-
         }
         return user.get();
     }

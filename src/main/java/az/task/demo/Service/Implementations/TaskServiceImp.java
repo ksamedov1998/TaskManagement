@@ -12,35 +12,36 @@ import az.task.demo.Repository.HibernateRepository;
 import az.task.demo.Repository.TaskRepository;
 import az.task.demo.Repository.UserRepository;
 import az.task.demo.Service.TaskService;
+import az.task.demo.Util.DateTimeFormattingUtil;
 import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import static az.task.demo.Util.DateTimeFormattingUtil.convertStringToLocalDateTime;
-
 @Service
 public class TaskServiceImp implements TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    private final HibernateRepository hibernateRepository;
 
+    private final LogHandler logHandler;
 
-    @Autowired
-    private HibernateRepository hibernateRepository;
+    private final DateTimeFormattingUtil dateTimeFormattingUtil;
 
-    @Autowired
-    private LogHandler logHandler;
+    public TaskServiceImp(TaskRepository taskRepository, UserRepository userRepository, HibernateRepository hibernateRepository, LogHandler logHandler, DateTimeFormattingUtil dateTimeFormattingUtil) {
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.hibernateRepository = hibernateRepository;
+        this.logHandler = logHandler;
+        this.dateTimeFormattingUtil = dateTimeFormattingUtil;
+    }
 
     @Override
     public List<NoneExpiredTaskMapper> allNoneExpiredTaskList() {
@@ -50,8 +51,8 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void addTask(String header, String description, String assignDateStr, String deadlineStr) {
-        LocalDateTime assignDate = convertStringToLocalDateTime(assignDateStr); //throws Runtime exception
-        LocalDateTime deadlineDate = convertStringToLocalDateTime(deadlineStr); // throws Runtime exception
+        LocalDateTime assignDate = dateTimeFormattingUtil.convertStringToLocalDateTime(assignDateStr); //throws Runtime exception
+        LocalDateTime deadlineDate = dateTimeFormattingUtil.convertStringToLocalDateTime(deadlineStr); // throws Runtime exception
         System.out.println(deadlineDate);
         if (isAssignDateAfterDeadline(assignDate, deadlineDate)) {
             taskRepository.save(header, description, assignDate, deadlineDate, TaskState.getState(TaskState.NOT_ASSIGNED), Status.getStatus(Status.ACTIVE));
@@ -123,7 +124,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void updateDeadline(int taskId, String newDeadline) {
-        LocalDateTime assignDate = convertStringToLocalDateTime(newDeadline); //can throw Runtime exception
+        LocalDateTime assignDate = dateTimeFormattingUtil.convertStringToLocalDateTime(newDeadline); //can throw Runtime exception
         if (taskRepository.updateTaskDeadline(taskId, assignDate) == 0) {
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateDeadline")

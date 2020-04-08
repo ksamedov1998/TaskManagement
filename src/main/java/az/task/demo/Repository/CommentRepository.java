@@ -9,16 +9,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Modifying
-    @Transactional
     @Query(value = "insert into Comment(text,status,task_id) values(:#{#comment.commentText}," +
                                 " :#{#comment.status}," +
                                 " :id )", nativeQuery = true)
     int save(@Param("id") int taskId,@Param("comment") Comment comment);
 
-
+    int deleteById(int commentId);
 
 
 

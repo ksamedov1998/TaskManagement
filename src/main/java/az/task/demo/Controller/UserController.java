@@ -1,6 +1,8 @@
 package az.task.demo.Controller;
 
 import az.task.demo.Domains.User;
+import az.task.demo.Domains.dto.UserDTO;
+import az.task.demo.Domains.mappers.UserToUserDTO;
 import az.task.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +15,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserToUserDTO userToUserDTO;
 
     @GetMapping(value = "/{userID}")
-    public User getUserByID(@PathVariable(value = "userID") int userId){
-        return userService.getUserById(userId);
+    public UserDTO getUserByID(@PathVariable(value = "userID") int userId){
+        return userToUserDTO.userToUserDTO(userService.getUserById(userId));
     }
 
-    @PostMapping(value = "/update/{userId}")
+    @PatchMapping(value = "/update/{userId}")
     public void addUser(@PathVariable(value = "userId") int id,
                         @RequestBody User user){
         userService.updateUser(id,user);
