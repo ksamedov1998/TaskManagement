@@ -20,34 +20,38 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface TaskRepository extends JpaRepository<Task,Integer> {
+public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Modifying
-    @Query(value = "insert into Task(header,description,assign_date,deadline,task_state,task_status) values(:header,:description,:assignDate,:deadline,:task_state,:task_status)",nativeQuery = true)
-    void save(String header, String description, LocalDateTime assignDate, LocalDateTime deadline,@Param(value = "task_state") int taskState,@Param(value = "task_status") int taskStatus);
+    @Query(value = "insert into Task(header,description,assign_date,deadline,task_state,task_status)" +
+            " values(:header,:description,:assignDate,:deadline,:taskState,:taskStatus)",
+            nativeQuery = true)
+    void save(String header, String description, LocalDateTime assignDate,
+              LocalDateTime deadline, int taskState,
+               int taskStatus);
 
     @Modifying
-    @Query(value = "update Task set task_status=:task_status where id=:id",nativeQuery = true)
+    @Query(value = "update Task set task_status=:task_status where id=:id", nativeQuery = true)
     int updateTaskStatus(@Param(value = "task_status") int taskStatus,
-                          @Param(value = "id") int taskId);
+                         @Param(value = "id") int taskId);
 
     List<Task> findAll();
 
     Optional<Task> getTaskById(int taskId);
 
     @Modifying
-    @Query(value = "insert into User_Task(user_task,task_user) values(:task_id,:user_id)",nativeQuery = true)
-    void assignTaskToUser(@Param(value ="task_id") int taskId,
-                          @Param(value ="user_id") int userId) ;
+    @Query(value = "insert into User_Task(user_task,task_user) values(:task_id,:user_id)", nativeQuery = true)
+    void assignTaskToUser(@Param(value = "task_id") int taskId,
+                          @Param(value = "user_id") int userId);
 
 
     @Modifying
-    @Query(value = "update Task set deadline=:newDeadline where id=:taskId",nativeQuery = true)
+    @Query(value = "update Task set deadline=:newDeadline where id=:taskId", nativeQuery = true)
     int updateTaskDeadline(int taskId, LocalDateTime newDeadline);
 
 
     @Modifying
-    @Query(value = "update Task set task_state=:taskState where id=:taskId",nativeQuery = true)
+    @Query(value = "update Task set task_state=:taskState where id=:taskId", nativeQuery = true)
     int updateTaskState(int taskId, int taskState);
 
 
@@ -59,11 +63,11 @@ public interface TaskRepository extends JpaRepository<Task,Integer> {
 
 
     @Modifying
-    @Query(value = "update Task set notified=true where id=:taskId",nativeQuery = true)
+    @Query(value = "update Task set notified=true where id=:taskId", nativeQuery = true)
     void setTaskNotified(int taskId);
 
 
     @Modifying
-    @Query(value = "update Task set task_state=:state  where (TIMESTAMPDIFF(SECOND ,CURRENT_TIMESTAMP(),deadline) <= 0 ) ; ",nativeQuery = true)
+    @Query(value = "update Task set task_state=:state  where (TIMESTAMPDIFF(SECOND ,CURRENT_TIMESTAMP(),deadline) <= 0 ) ; ", nativeQuery = true)
     void changeExpiredTasksStatus(int state);
 }

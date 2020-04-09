@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-04-09T01:23:38+0400",
+    date = "2020-04-09T15:02:45+0400",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.6 (JetBrains s.r.o)"
 )
 @Component
@@ -34,27 +34,5 @@ public class UserToUserDTOImpl implements UserToUserDTO {
         userDTO.setEmail( source.getEmail() );
 
         return userDTO;
-    }
-
-    @Override
-    public User userDTOtoUser(UserDTO destination) {
-        if ( destination == null ) {
-            return null;
-        }
-
-        User user = new User();
-
-        List<Task> list = destination.getTaskList();
-        if ( list != null ) {
-            user.setTaskList( new ArrayList<Task>( list ) );
-        }
-        user.setEmail( destination.getEmail() );
-        if ( destination.getUserType() != null ) {
-            user.setUserType( destination.getUserType() );
-        }
-        user.setId( destination.getId() );
-        user.setUsername( destination.getUsername() );
-
-        return user;
     }
 }

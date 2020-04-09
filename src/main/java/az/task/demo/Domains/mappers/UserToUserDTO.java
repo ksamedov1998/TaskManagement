@@ -11,5 +11,4 @@ import org.mapstruct.ReportingPolicy;
         componentModel = "spring")
 public interface UserToUserDTO {
     UserDTO userToUserDTO(User source);
-    User userDTOtoUser(UserDTO destination);
 }

@@ -3,6 +3,8 @@ package az.task.demo.Controller;
 import az.task.demo.Domains.RequestBodies.TaskCreationRequestBody;
 import az.task.demo.Domains.RequestBodies.UpdateTaskStateRequestBody;
 import az.task.demo.Domains.Task;
+import az.task.demo.Domains.dto.TaskDTO;
+import az.task.demo.Domains.mappers.TaskToTaskDTO;
 import az.task.demo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +15,14 @@ import java.util.List;
 @RequestMapping(value = "/task")
 public class TaskController {
 
+    private final TaskService taskService;
+    private TaskToTaskDTO taskToTaskDTO;
+
     @Autowired
-    private TaskService taskService;
+    public TaskController(TaskToTaskDTO taskToTaskDTO,TaskService taskService) {
+        this.taskToTaskDTO = taskToTaskDTO;
+        this.taskService=taskService;
+    }
 
 
     @GetMapping(value = "/")
@@ -28,8 +36,8 @@ public class TaskController {
     }
 
     @GetMapping(value = "/{taskId}")
-    public Task getTask(@PathVariable(value = "taskId") int taskId){
-        return taskService.getTask(taskId);
+    public TaskDTO getTask(@PathVariable(value = "taskId") int taskId){
+        return taskToTaskDTO.taskToTaskDTO(taskService.getTask(taskId));
     }
 
     @PostMapping("/add")
