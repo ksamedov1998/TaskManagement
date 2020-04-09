@@ -30,23 +30,6 @@ public class AdminServiceImp implements AdminService {
     @Autowired
     private LogHandler logHandler;
 
-    @Override
-    public User getAdminById(int adminId) {
-        Optional<User> user=adminRepository.getUserById(adminId);
-        if(!user.isPresent()){
-            logHandler.publish(new LogBuilder()
-                                        .setPoint("AdminServiceImp.getAdminById")
-                                        .setException("UserNotFoundException")
-                                        .setLevel(Level.INFO.getName())
-                                        .setState("FAIL")
-                                        .build()
-                                        );
-            throw new UserNotFound(adminId);
-        }
-        return user.get();
-    }
-
-
 
     @Override
     public void addUser(UserCreatingRequestBody body) {

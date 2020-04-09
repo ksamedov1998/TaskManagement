@@ -42,7 +42,7 @@ public class UserServiceImp implements UserService {
     public List<User> getUserListByStatus(int userStatus) {
         List<User> userList;
         if(UserStatus.checkStatus(userStatus)){
-            userList=userRepository.findAllByStatusEquals(userStatus);
+            userList=userRepository.findAllByStatus(userStatus);
         }else{
             throw new StatusNotFoundException(userStatus,"USERSTATUS");
         }
@@ -53,7 +53,8 @@ public class UserServiceImp implements UserService {
     public List<User> getUserListByType(int userType) {
         List<User> userList;
         if(UserStatus.checkStatus(userType)){
-            userList=userRepository.findAllByStatusEquals(userType);
+            userList=userRepository.findAllByUserType(userType);
+            System.out.println(userList);
         }else{
             throw new StatusNotFoundException(userType,"USERTYPE");
         }
@@ -74,6 +75,7 @@ public class UserServiceImp implements UserService {
             );
             throw new UserNotFound(userId);
         }
+
     }
 
 

@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 @Transactional
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
@@ -16,10 +18,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "insert into Comment(text,status,task_id) values(:#{#comment.commentText}," +
                                 " :#{#comment.status}," +
                                 " :id )", nativeQuery = true)
-    int save(@Param("id") int taskId,@Param("comment") Comment comment);
+    Optional<Comment> save(@Param("id") int taskId, @Param("comment") Comment comment);
 
     int deleteById(int commentId);
-
-
 
 }

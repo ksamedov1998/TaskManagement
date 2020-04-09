@@ -12,6 +12,7 @@ import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 import static az.task.demo.Util.Numbers.*;
@@ -30,9 +31,10 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public void addComment(int taskId, Comment comment) {
+    public Comment addComment(int taskId, Comment comment) {
             comment.setStatus(Status.ACTIVE.getValue());
-            if(commentRepository.save(taskId,comment)==NOT_SUCCESSFUL){
+        Optional<Comment> returnedComment=commentRepository.save(taskId,comment);
+            if(!returnedComment.isPresent()){
                 logHandler.publish(new LogBuilder()
                         .setPoint("CommontServiceImp.addComment")
                         .setException("TaskNotFoundException")
@@ -42,6 +44,7 @@ public class CommentServiceImp implements CommentService {
                 );
                     throw new TaskNotFound(taskId);
              }
+            return returnedComment.get();
     }
 
     @Override

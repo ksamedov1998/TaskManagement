@@ -16,25 +16,17 @@ import java.util.Optional;
 @Transactional
 public interface AdminRepository extends JpaRepository<User,Integer>, JpaSpecificationExecutor<User> {
 
-
-    Optional<User> getUserById(int userId);
-
-
     @Modifying(flushAutomatically =true,clearAutomatically = true)
     @Query(value = "insert into User( username,email,password,user_type,status) values(:#{#body.username}," +
                                                                                       ":#{#body.email}," +
                                                                                         ":#{#body.password}," +
                                                                                        ":#{#body.userType}," +
                                                                                       ":#{#body.userStatus})",nativeQuery = true)
-    void saveUser(UserCreatingRequestBody body);
+    int saveUser(UserCreatingRequestBody body);
 
     @Modifying
     @Query(value = "update User set status=:status where User.id= :id",nativeQuery = true)
     int deleteUserById(@Param(value = "id") int userId,
                         @Param(value ="status") int deletedStatus);
 
-//    fix
-    @Modifying(clearAutomatically = true)
-    @Query(value = "update User set username=:username , email=:email, password=:password where id= :id",nativeQuery = true)
-    int update(int id,String username,String email,String password);
 }
