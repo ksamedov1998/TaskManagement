@@ -18,9 +18,9 @@ public class CommentController {
     private HibernateRepository hibernateRepository;
 
     @PostMapping("/post/{taskId}")
-    public void addComment(@PathVariable("taskId") int taskId,
+    public Comment addComment(@PathVariable("taskId") int taskId,
                            @RequestBody Comment comment){
-        commentService.addComment(taskId,comment);
+       return commentService.addComment(taskId,comment);
     }
 
     @DeleteMapping("/delete/{commentId}")

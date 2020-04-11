@@ -64,6 +64,14 @@
 					<groupId>org.junit.vintage</groupId>
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.mockito</groupId>
+					<artifactId>org.mockito:mockito-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.assertj</groupId>
+					<artifactId>assertj-core</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
@@ -84,6 +92,21 @@
 		<artifactId>mapstruct</artifactId>
 		<version>1.3.1.Final</version>
 	</dependency>
+
+
+<!--						Test					-->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.3.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.15.0</version>
+		</dependency>
 
 	</dependencies>
 
