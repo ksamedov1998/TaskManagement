@@ -5,5 +5,5 @@ import az.task.demo.Domains.Comment;
 public interface CommentService {
     Comment addComment(int taskId, Comment comment);
     void deleteComment(int commentId);
-    void updateComment(int commentId,Comment comment);
+    Comment updateComment(int commentId,Comment comment);
 }

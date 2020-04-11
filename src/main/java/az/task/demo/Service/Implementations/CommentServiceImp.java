@@ -11,6 +11,7 @@ import az.task.demo.Service.CommentService;
 import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import static az.task.demo.Util.Numbers.*;
 
 @Service
+@Transactional
 public class CommentServiceImp implements CommentService {
 
     private final LogHandler logHandler;
@@ -63,8 +65,9 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public void updateComment(int commentId, Comment comment) {
-        if(!hibernateRepository.update(DynamicQueryUtil.createQuery(commentId,comment))){
+    public Comment updateComment(int commentId, Comment comment) {
+        Optional<Comment> optionalComment=hibernateRepository.update(Comment.class,commentId,DynamicQueryUtil.createQuery(commentId,comment));
+        if(optionalComment.isEmpty()){
             logHandler.publish(new LogBuilder()
                     .setPoint("CommontServiceImp.updateComment")
                     .setException("CommentNotFoundException")
@@ -74,5 +77,6 @@ public class CommentServiceImp implements CommentService {
             );
             throw new CommentNotFound(commentId);
         }
+        return optionalComment.get();
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateRepository {
@@ -35,16 +36,19 @@ public class HibernateRepository {
     }
 
     @Modifying(clearAutomatically = true,flushAutomatically = true)
-    @Transactional
-    public boolean update(String query) {
+    public <T> Optional<T> update(Class<T> t,int id,String query) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.clear();
         Query runnableQuery=session.createQuery(query);
         int update=runnableQuery.executeUpdate();
+        Optional<T> updated=Optional.empty();
+        if(update!=0){
+             updated=Optional.of(session.find(t,id));
+        }
         transaction.commit();
         session.close();
-        return (update!=0);
+        return updated;
     }
 
 

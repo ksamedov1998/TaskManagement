@@ -21,7 +21,7 @@ public class User{
     @Column(name = "user_type")
     private int userType;
 
-    @ManyToMany(mappedBy = "listOfUsers")
+    @ManyToMany(mappedBy = "listOfUsers",fetch = FetchType.EAGER)
     private List<Task> taskList;
 
     private String username;

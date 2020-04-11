@@ -4,8 +4,10 @@ import az.task.demo.Domains.Log;
 import az.task.demo.Repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class LogServiceImp implements az.task.demo.Service.LogService {
 
     @Autowired

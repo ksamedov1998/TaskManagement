@@ -16,6 +16,9 @@ import az.task.demo.Util.DateTimeFormattingUtil;
 import az.task.demo.Util.DynamicQueryUtil;
 import az.task.demo.Util.LogHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.beans.Transient;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @Service
+@Transactional
 public class TaskServiceImp implements TaskService {
 
     private final TaskRepository taskRepository;
@@ -164,9 +168,9 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public void updateTask(int taskId, Task task) {
-        String query = DynamicQueryUtil.createQuery(taskId, task);
-        if (!hibernateRepository.update(query)) {
+    public Task updateTask(int taskId, Task task) {
+        Optional<Task> optionalTask=hibernateRepository.update(Task.class,taskId,DynamicQueryUtil.createQuery(taskId, task));
+        if (optionalTask.isEmpty()) {
             logHandler.publish(new LogBuilder()
                     .setPoint("TaskServiceImp.updateTask")
                     .setException("TaskNotFoundException")
@@ -176,6 +180,7 @@ public class TaskServiceImp implements TaskService {
             );
             throw new TaskNotFound(taskId);
         }
+        return optionalTask.get();
     }
 
 
